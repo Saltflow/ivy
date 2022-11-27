@@ -5,7 +5,7 @@ import ivy
 from typing import Callable, Type, List, Iterable, Optional
 from types import ModuleType
 
-TO_IGNORE = ["is_variable", "is_ivy_array", "is_native_array", "is_array", "shape"]
+TO_IGNORE = ["is_ivy_array", "is_native_array", "is_array", "shape"]
 
 
 def _wrap_function(function_name: str, static: bool) -> Callable:
@@ -101,8 +101,8 @@ def add_ivy_container_instance_methods(
     from the statistical module as instance methods to our toy `ContainerExample` class:
 
     >>> from ivy.functional.ivy import statistical
-    >>> class ContainerExample: \
-            pass
+    >>> class ContainerExample:
+    ...     pass
     >>> ivy.add_ivy_container_instance_methods(ContainerExample, [statistical])
     >>> print(hasattr(ContainerExample, "mean"), hasattr(ContainerExample, "var"))
     True True

@@ -1,35 +1,35 @@
 # global
-from hypothesis import given
 
 # local
 import ivy_tests.test_ivy.helpers as helpers
 import ivy_tests.test_ivy.test_frontends.test_numpy.helpers as np_frontend_helpers
-from ivy_tests.test_ivy.helpers import handle_cmd_line_args
+from ivy_tests.test_ivy.helpers import handle_frontend_test
 
 
 # sinh
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="numpy.sinh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric")
     ),
-    dtype=helpers.get_dtypes("float", full=False, none=True),
     where=np_frontend_helpers.where(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.numpy.sinh"
-    ),
 )
 def test_numpy_sinh(
     dtype_and_x,
-    dtype,
     where,
     as_variable,
     with_out,
     num_positional_args,
     native_array,
-    fw,
+    frontend,
+    fn_tree,
+    on_device,
 ):
     input_dtype, x = dtype_and_x
+    dtype, input_dtype, casting = np_frontend_helpers.handle_dtype_and_casting(
+        dtypes=input_dtype,
+        get_dtypes_kind="numeric",
+    )
     where, as_variable, native_array = np_frontend_helpers.handle_where_and_array_bools(
         where=where,
         input_dtype=input_dtype,
@@ -42,39 +42,43 @@ def test_numpy_sinh(
         with_out=with_out,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        fw=fw,
-        frontend="numpy",
-        fn_tree="sinh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         out=None,
         where=where,
-        dtype=dtype[0],
+        casting=casting,
+        order="K",
+        dtype=dtype,
+        subok=True,
     )
 
 
 # cosh
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="numpy.cosh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric")
     ),
-    dtype=helpers.get_dtypes("float", full=False, none=True),
     where=np_frontend_helpers.where(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.numpy.cosh"
-    ),
 )
 def test_numpy_cosh(
     dtype_and_x,
-    dtype,
     where,
     as_variable,
     with_out,
     num_positional_args,
     native_array,
-    fw,
+    frontend,
+    fn_tree,
+    on_device,
 ):
     input_dtype, x = dtype_and_x
+    dtype, input_dtype, casting = np_frontend_helpers.handle_dtype_and_casting(
+        dtypes=input_dtype,
+        get_dtypes_kind="numeric",
+    )
     where, as_variable, native_array = np_frontend_helpers.handle_where_and_array_bools(
         where=where,
         input_dtype=input_dtype,
@@ -87,39 +91,43 @@ def test_numpy_cosh(
         with_out=with_out,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        fw=fw,
-        frontend="numpy",
-        fn_tree="cosh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         out=None,
         where=where,
-        dtype=dtype[0],
+        casting=casting,
+        order="K",
+        dtype=dtype,
+        subok=True,
     )
 
 
 # tanh
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="numpy.tanh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric")
     ),
-    dtype=helpers.get_dtypes("float", full=False, none=True),
     where=np_frontend_helpers.where(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.numpy.tanh"
-    ),
 )
 def test_numpy_tanh(
     dtype_and_x,
-    dtype,
     where,
     as_variable,
     with_out,
     num_positional_args,
     native_array,
-    fw,
+    frontend,
+    fn_tree,
+    on_device,
 ):
     input_dtype, x = dtype_and_x
+    dtype, input_dtype, casting = np_frontend_helpers.handle_dtype_and_casting(
+        dtypes=input_dtype,
+        get_dtypes_kind="numeric",
+    )
     where, as_variable, native_array = np_frontend_helpers.handle_where_and_array_bools(
         where=where,
         input_dtype=input_dtype,
@@ -132,40 +140,43 @@ def test_numpy_tanh(
         with_out=with_out,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        fw=fw,
-        frontend="numpy",
-        fn_tree="tanh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         out=None,
         where=where,
-        casting="same_kind",
-        dtype=dtype[0],
+        casting=casting,
+        order="K",
+        dtype=dtype,
+        subok=True,
     )
 
 
 # arcsinh
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="numpy.arcsinh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric")
     ),
-    dtype=helpers.get_dtypes("float", full=False, none=True),
     where=np_frontend_helpers.where(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.numpy.arcsinh"
-    ),
 )
 def test_numpy_arcsinh(
     dtype_and_x,
-    dtype,
     where,
     as_variable,
     with_out,
     num_positional_args,
     native_array,
-    fw,
+    frontend,
+    fn_tree,
+    on_device,
 ):
     input_dtype, x = dtype_and_x
+    dtype, input_dtype, casting = np_frontend_helpers.handle_dtype_and_casting(
+        dtypes=input_dtype,
+        get_dtypes_kind="numeric",
+    )
     where, as_variable, native_array = np_frontend_helpers.handle_where_and_array_bools(
         where=where,
         input_dtype=input_dtype,
@@ -178,38 +189,43 @@ def test_numpy_arcsinh(
         with_out=with_out,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="numpy",
-        fn_tree="arcsinh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         out=None,
         where=where,
-        dtype=dtype[0],
+        casting=casting,
+        order="K",
+        dtype=dtype,
+        subok=True,
     )
 
 
 # arccosh
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="numpy.arccosh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric")
     ),
-    dtype=helpers.get_dtypes("float", full=False, none=True),
     where=np_frontend_helpers.where(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.numpy.arccosh"
-    ),
 )
 def test_numpy_arccosh(
     dtype_and_x,
-    dtype,
     where,
     as_variable,
     with_out,
     num_positional_args,
     native_array,
-    fw,
+    frontend,
+    fn_tree,
+    on_device,
 ):
     input_dtype, x = dtype_and_x
+    dtype, input_dtype, casting = np_frontend_helpers.handle_dtype_and_casting(
+        dtypes=input_dtype,
+        get_dtypes_kind="numeric",
+    )
     where, as_variable, native_array = np_frontend_helpers.handle_where_and_array_bools(
         where=where,
         input_dtype=input_dtype,
@@ -222,39 +238,43 @@ def test_numpy_arccosh(
         with_out=with_out,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        fw=fw,
-        frontend="numpy",
-        fn_tree="arccosh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         out=None,
         where=where,
-        dtype=dtype[0],
+        casting=casting,
+        order="K",
+        dtype=dtype,
+        subok=True,
     )
 
 
 # arctanh
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="numpy.arctanh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric")
     ),
-    dtype=helpers.get_dtypes("float", full=False, none=True),
     where=np_frontend_helpers.where(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.numpy.arctanh"
-    ),
 )
 def test_numpy_arctanh(
     dtype_and_x,
-    dtype,
     where,
     as_variable,
     with_out,
     num_positional_args,
     native_array,
-    fw,
+    frontend,
+    fn_tree,
+    on_device,
 ):
     input_dtype, x = dtype_and_x
+    dtype, input_dtype, casting = np_frontend_helpers.handle_dtype_and_casting(
+        dtypes=input_dtype,
+        get_dtypes_kind="numeric",
+    )
     where, as_variable, native_array = np_frontend_helpers.handle_where_and_array_bools(
         where=where,
         input_dtype=input_dtype,
@@ -267,12 +287,14 @@ def test_numpy_arctanh(
         with_out=with_out,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        fw=fw,
-        frontend="numpy",
-        fn_tree="arctanh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         out=None,
         where=where,
-        casting="same_kind",
-        dtype=dtype[0],
+        casting=casting,
+        order="K",
+        dtype=dtype,
+        subok=True,
     )

@@ -30,15 +30,16 @@ class ContainerWithActivations(ContainerBase):
         x
             input container.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -51,11 +52,12 @@ class ContainerWithActivations(ContainerBase):
 
         Examples
         --------
-        >>> x = ivy.Container(a=ivy.array([1.0, 0, 1.0]))
+        >>> x = ivy.Container(a=ivy.array([1.0, -1.2]), b=ivy.array([0.4, -0.2]))
         >>> y = ivy.Container.static_relu(x)
         >>> print(y)
         {
-            a: ivy.array([1., 0., 1.])
+        a: ivy.array([1., 0.]),
+        b: ivy.array([0.40000001, 0.])
         }
 
         """
@@ -89,15 +91,16 @@ class ContainerWithActivations(ContainerBase):
         self
             input container.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -110,11 +113,12 @@ class ContainerWithActivations(ContainerBase):
 
         Examples
         --------
-        >>> x = ivy.Container(a=ivy.array([1.0, 0, 1.0]))
+        >>> x = ivy.Container(a=ivy.array([1.0, -1.2]), b=ivy.array([0.4, -0.2]))
         >>> y = x.relu()
         >>> print(y)
         {
-            a: ivy.array([1., 0., 1.])
+        a: ivy.array([1., 0.]),
+        b: ivy.array([0.40000001, 0.])
         }
 
         """
@@ -151,15 +155,16 @@ class ContainerWithActivations(ContainerBase):
         alpha
             array or scalar specifying the negative slope.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -213,15 +218,16 @@ class ContainerWithActivations(ContainerBase):
         alpha
             array or scalar specifying the negative slope.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -275,15 +281,16 @@ class ContainerWithActivations(ContainerBase):
         approximate
             whether to use the gelu approximation algorithm or exact formulation.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -318,7 +325,7 @@ class ContainerWithActivations(ContainerBase):
         self: ivy.Container,
         /,
         *,
-        approximate: bool = True,
+        approximate: bool = False,
         key_chains: Optional[Union[List[str], Dict[str, str]]] = None,
         to_apply: bool = True,
         prune_unapplied: bool = False,
@@ -337,15 +344,16 @@ class ContainerWithActivations(ContainerBase):
         approximate
             whether to use the gelu approximation algorithm or exact formulation.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -396,15 +404,16 @@ class ContainerWithActivations(ContainerBase):
         x
             input container.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -454,15 +463,16 @@ class ContainerWithActivations(ContainerBase):
         self
             input container.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -515,15 +525,16 @@ class ContainerWithActivations(ContainerBase):
         axis
             the axis or axes along which the softmax should be computed
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -577,15 +588,16 @@ class ContainerWithActivations(ContainerBase):
         axis
             the axis or axes along which the softmax should be computed
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -638,19 +650,20 @@ class ContainerWithActivations(ContainerBase):
         x
             input container.
         beta
-            The beta value for the softplus formation. Default: None.
+            The beta value for the softplus formation. Default: ``None``.
         threshold
-            values above this revert to a linear function. Default: None.
+            values above this revert to a linear function. Default: ``None``.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -710,19 +723,20 @@ class ContainerWithActivations(ContainerBase):
         self
             input container.
         beta
-            The beta value for the softplus formation. Default: None.
+            The beta value for the softplus formation. Default: ``None``.
         threshold
-            values above this revert to a linear function. Default: None.
+            values above this revert to a linear function. Default: ``None``.
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -783,15 +797,16 @@ class ContainerWithActivations(ContainerBase):
         axis
             the axis or axes along which the log_softmax should be computed
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.
@@ -852,15 +867,16 @@ class ContainerWithActivations(ContainerBase):
         axis
             the axis or axes along which the log_softmax should be computed
         key_chains
-            The key-chains to apply or not apply the method to. Default is None.
+            The key-chains to apply or not apply the method to. Default is ``None``.
         to_apply
             If True, the method will be applied to key_chains, otherwise key_chains
-            will be skipped. Default is True.
+            will be skipped. Default is ``True``.
         prune_unapplied
             Whether to prune key_chains for which the function was not applied.
-            Default is False.
+            Default is ``False``.
         map_sequences
-            Whether to also map method to sequences (lists, tuples). Default is False.
+            Whether to also map method to sequences (lists, tuples).
+            Default is ``False``.
         out
             optional output container, for writing the result to. It must have a shape
             that the inputs broadcast to.

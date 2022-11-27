@@ -17,9 +17,12 @@ def argmax(
     *,
     axis: Optional[int] = None,
     keepdims: bool = False,
+    output_dtype: Optional[Union[ivy.Dtype, ivy.NativeDtype]] = None,
     out: Optional[Union[tf.Tensor, tf.Variable]] = None,
 ) -> Union[tf.Tensor, tf.Variable]:
     ret = x.numpy().argmax(axis=axis, keepdims=keepdims)
+    if output_dtype is not None:
+        ret = tf.cast(ret, output_dtype)
     return tf.convert_to_tensor(ret, dtype=ret.dtype)
 
 
@@ -29,10 +32,18 @@ def argmin(
     *,
     axis: Optional[int] = None,
     keepdims: bool = False,
+    output_dtype: Optional[tf.dtypes.DType] = None,
     out: Optional[Union[tf.Tensor, tf.Variable]] = None,
 ) -> Union[tf.Tensor, tf.Variable]:
     ret = x.numpy().argmin(axis=axis, keepdims=keepdims)
-    return tf.convert_to_tensor(ret, dtype=ret.dtype)
+    # The returned array must have the default array index data type.
+    if output_dtype is not None:
+        output_dtype = ivy.as_native_dtype(output_dtype)
+        if output_dtype not in (tf.int32, tf.int64):
+            return tf.convert_to_tensor(ret, dtype=tf.int64)
+        else:
+            return tf.convert_to_tensor(ret, dtype=output_dtype)
+    return tf.convert_to_tensor(ret, dtype=tf.int64)
 
 
 def nonzero(

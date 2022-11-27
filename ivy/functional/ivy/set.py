@@ -1,5 +1,5 @@
 # global
-from typing import Union, NamedTuple, Optional
+from typing import Union, Tuple, Optional
 
 # local
 import ivy
@@ -7,6 +7,7 @@ from ivy.func_wrapper import (
     to_native_arrays_and_back,
     handle_out_argument,
     handle_nestable,
+    handle_array_like,
 )
 from ivy.exceptions import handle_exceptions
 
@@ -18,7 +19,15 @@ from ivy.exceptions import handle_exceptions
 @to_native_arrays_and_back
 @handle_nestable
 @handle_exceptions
-def unique_all(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
+@handle_array_like
+def unique_all(
+    x: Union[ivy.Array, ivy.NativeArray]
+) -> Tuple[
+    Union[ivy.Array, ivy.NativeArray],
+    Union[ivy.Array, ivy.NativeArray],
+    Union[ivy.Array, ivy.NativeArray],
+    Union[ivy.Array, ivy.NativeArray],
+]:
     """Returns the unique elements of an input array ``x``, the first occurring indices
     for each unique element in ``x``, the indices from the set of unique elements that
     reconstruct ``x``, and the corresponding counts for each unique element in ``x``.
@@ -138,9 +147,10 @@ def unique_all(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
 
     With :class:`ivy.NativeArray` input:
 
-    >>> x = ivy.native_array([[ 2.1141,  0.8101,  0.9298,  0.8460],\
-    [-1.2119, -0.3519, -0.6252,  0.4033],[ 0.7443,  0.2577, -0.3707, -0.0545],\
-    [-0.3238,  0.5944,  0.0775, -0.4327]])
+    >>> x = ivy.native_array([[ 2.1141,  0.8101,  0.9298,  0.8460],
+    ...                       [-1.2119, -0.3519, -0.6252,  0.4033],
+    ...                       [ 0.7443,  0.2577, -0.3707, -0.0545],
+    ...                       [-0.3238,  0.5944,  0.0775, -0.4327]])
     >>> print(x)
     ivy.array([[ 2.1141,  0.8101,  0.9298,  0.8460],
                [-1.2119, -0.3519, -0.6252,  0.4033],
@@ -176,10 +186,10 @@ def unique_all(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
 
     With :class:`ivy.Array` input:
 
-    >>> x = ivy.array([[ 2.1141,  0.8101,  0.9298,  0.8460],\
-    [-1.2119, -0.3519, -0.6252,  0.4033],\
-    [ 0.7443,  0.2577, -0.3707, -0.0545],\
-    [-0.3238,  0.5944,  0.0775, -0.4327]])
+    >>> x = ivy.array([[ 2.1141,  0.8101,  0.9298,  0.8460],
+    ...                [-1.2119, -0.3519, -0.6252,  0.4033],
+    ...                [ 0.7443,  0.2577, -0.3707, -0.0545],
+    ...                [-0.3238,  0.5944,  0.0775, -0.4327]])
     >>> print(x)
     ivy.array([[ 2.1141,  0.8101,  0.9298,  0.8460],
                [-1.2119, -0.3519, -0.6252,  0.4033],
@@ -212,9 +222,10 @@ def unique_all(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
 
     With :class:`ivy.NativeArray` input:
 
-    >>> x = ivy.native_array([[-2.176,  0.889,  1.175, -0.763],\
-    [-0.071,  1.262, -0.456, -2.114],[-0.349,  0.615, -0.594, -1.335],\
-    [ 0.212,  0.457, -0.827,  0.209]])
+    >>> x = ivy.native_array([[-2.176,  0.889,  1.175, -0.763],
+    ...                       [-0.071,  1.262, -0.456, -2.114],
+    ...                       [-0.349,  0.615, -0.594, -1.335],
+    ...                       [ 0.212,  0.457, -0.827,  0.209]])
     >>> print(x)
     ivy.array([[-2.176,  0.889,  1.175, -0.763],
                [-0.071,  1.262, -0.456, -2.114],
@@ -254,7 +265,10 @@ def unique_all(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
 @to_native_arrays_and_back
 @handle_nestable
 @handle_exceptions
-def unique_inverse(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
+@handle_array_like
+def unique_inverse(
+    x: Union[ivy.Array, ivy.NativeArray]
+) -> Tuple[Union[ivy.Array, ivy.NativeArray], Union[ivy.Array, ivy.NativeArray]]:
     """Returns the unique elements of an input array ``x``, and the indices from the
      set of unique elements that reconstruct ``x``.
 
@@ -324,7 +338,7 @@ def unique_inverse(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
     >>> x = ivy.array([4,5,3,2,4,1,3])
     >>> y = ivy.unique_inverse(x)
     >>> print(y)
-    unique_inverse(values=ivy.array([1, 2, 3, 4, 5]),
+    Results(values=ivy.array([1, 2, 3, 4, 5]),
     inverse_indices=ivy.array([3, 4, 2, 1, 3, 0, 2]))
 
     With :class:`ivy.NativeArray` input:
@@ -332,13 +346,13 @@ def unique_inverse(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
     >>> x = ivy.native_array([0.5,0.3,0.8,0.2,1.2,2.4,0.3])
     >>> y = ivy.ivy.unique_inverse(x)
     >>> print(y)
-    unique_inverse(values=ivy.array([0.2, 0.3, 0.5, 0.8, 1.2, 2.4]),
+    Results(values=ivy.array([0.2, 0.3, 0.5, 0.8, 1.2, 2.4]),
     inverse_indices=ivy.array([2, 1, 3, 0, 4, 5, 1]))
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([1., 4., 3. , 5. , 3. , 7.]), \
-                          b=ivy.array([3,2,6,3,7,4,9]))
+    >>> x = ivy.Container(a=ivy.array([1., 4., 3. , 5. , 3. , 7.]),
+    ...                   b=ivy.array([3, 2, 6, 3, 7, 4, 9]))
     >>> y = ivy.ivy.unique_inverse(x)
     >>> print(y)
     {
@@ -356,6 +370,7 @@ def unique_inverse(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def unique_values(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -421,7 +436,10 @@ def unique_values(
 @to_native_arrays_and_back
 @handle_nestable
 @handle_exceptions
-def unique_counts(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
+@handle_array_like
+def unique_counts(
+    x: Union[ivy.Array, ivy.NativeArray]
+) -> Tuple[Union[ivy.Array, ivy.NativeArray], Union[ivy.Array, ivy.NativeArray]]:
     """
     Returns the unique elements of an input array ``x`` and the corresponding counts for
     each unique element in ``x``.
@@ -503,8 +521,8 @@ def unique_counts(x: Union[ivy.Array, ivy.NativeArray]) -> NamedTuple:
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 1., 3. , 2. , 1. , 0.]), \
-                          b=ivy.array([1,2,1,3,4,1,3]))
+    >>> x = ivy.Container(a=ivy.array([0., 1., 3. , 2. , 1. , 0.]),
+    ...                   b=ivy.array([1, 2, 1, 3, 4, 1, 3]))
     >>> y = ivy.unique_counts(x)
     >>> print(y)
     {

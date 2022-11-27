@@ -17,9 +17,13 @@ def argmax(
     *,
     axis: Optional[int] = None,
     keepdims: bool = False,
+    output_dtype: Optional[Union[ivy.Dtype, ivy.NativeDtype]] = None,
     out: Optional[JaxArray] = None,
 ) -> JaxArray:
-    return jnp.argmax(x, axis=axis, keepdims=keepdims)
+    ret = jnp.argmax(x, axis=axis, keepdims=keepdims)
+    if output_dtype:
+        ret = ret.astype(output_dtype)
+    return ret
 
 
 def argmin(
@@ -28,9 +32,18 @@ def argmin(
     *,
     axis: Optional[int] = None,
     keepdims: bool = False,
+    output_dtype: Optional[jnp.dtype] = None,
     out: Optional[JaxArray] = None,
 ) -> JaxArray:
-    return jnp.argmin(x, axis=axis, keepdims=keepdims)
+    ret = jnp.argmin(x, axis=axis, keepdims=keepdims)
+    # The returned array must have the default array index data type.
+    if output_dtype is not None:
+        output_dtype = ivy.as_native_dtype(output_dtype)
+        if output_dtype not in (jnp.int32, jnp.int64):
+            return jnp.array(ret, dtype=jnp.int64)
+        else:
+            return jnp.array(ret, dtype=output_dtype)
+    return jnp.array(ret, dtype=jnp.int64)
 
 
 def nonzero(
@@ -58,7 +71,7 @@ def where(
     out: Optional[JaxArray] = None,
 ) -> JaxArray:
     x1, x2 = ivy.promote_types_of_inputs(x1, x2)
-    return jnp.where(condition, x1, x2).astype(x1.dtype)
+    return ivy.astype(jnp.where(condition, x1, x2), x1.dtype, copy=False)
 
 
 # Extra #

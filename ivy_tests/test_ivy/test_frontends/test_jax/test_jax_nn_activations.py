@@ -1,28 +1,28 @@
-from hypothesis import given, strategies as st
+from hypothesis import strategies as st
 
 # local
 import ivy_tests.test_ivy.helpers as helpers
-from ivy_tests.test_ivy.helpers import handle_cmd_line_args
+from ivy_tests.test_ivy.helpers import handle_frontend_test
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.relu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=3,
         small_abs_safety_factor=3,
         safety_factor_scale="linear",
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.relu"
-    ),
 )
 def test_jax_nn_relu(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -31,30 +31,31 @@ def test_jax_nn_relu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.relu",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.relu6",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.relu6"
     ),
 )
 def test_jax_nn_relu6(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -63,30 +64,31 @@ def test_jax_nn_relu6(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.relu6",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.soft_sign",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.soft_sign"
     ),
 )
 def test_jax_nn_soft_sign(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -95,30 +97,31 @@ def test_jax_nn_soft_sign(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.soft_sign",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.silu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.silu"
     ),
 )
 def test_jax_nn_silu(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -127,32 +130,33 @@ def test_jax_nn_silu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.silu",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.leaky_relu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.leaky_relu"
     ),
     negative_slope=helpers.floats(min_value=0.0, max_value=1.0),
 )
 def test_jax_nn_leaky_relu(
+    *,
     dtype_and_x,
+    negative_slope,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
-    negative_slope,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -161,15 +165,18 @@ def test_jax_nn_leaky_relu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.leaky_relu",
+        rtol=1e-01,
+        atol=1e-01,
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         negative_slope=negative_slope,
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.gelu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("float"),
         large_abs_safety_factor=8,
@@ -177,17 +184,17 @@ def test_jax_nn_leaky_relu(
         safety_factor_scale="log",
     ),
     approximate=st.booleans(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.gelu"
-    ),
 )
 def test_jax_nn_gelu(
+    *,
     dtype_and_x,
+    approximate,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
-    approximate,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -196,8 +203,9 @@ def test_jax_nn_gelu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.gelu",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         rtol=1e-02,
         atol=1e-02,
         x=x[0],
@@ -205,24 +213,24 @@ def test_jax_nn_gelu(
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.sigmoid",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.sigmoid"
-    ),
 )
 def test_jax_nn_sigmoid(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -231,14 +239,15 @@ def test_jax_nn_sigmoid(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.sigmoid",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.one_hot",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
@@ -248,17 +257,17 @@ def test_jax_nn_sigmoid(
         max_value=3,
     ),
     num_classes=st.integers(min_value=4, max_value=6),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.one_hot"
-    ),
 )
 def test_jax_nn_one_hot(
+    *,
     dtype_and_x,
     num_classes,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -267,15 +276,16 @@ def test_jax_nn_one_hot(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.one_hot",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         num_classes=num_classes,
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.softmax",
     dtype_x_axis=helpers.dtype_values_axis(
         available_dtypes=helpers.get_dtypes("float"),
         min_num_dims=1,
@@ -285,16 +295,16 @@ def test_jax_nn_one_hot(
         force_int_axis=True,
         valid_axis=True,
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.softmax"
-    ),
 )
 def test_jax_nn_softmax(
+    *,
     dtype_x_axis,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     x_dtype, x, axis = dtype_x_axis
 
@@ -304,31 +314,32 @@ def test_jax_nn_softmax(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.softmax",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
         axis=axis,
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.softplus",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.softplus"
-    ),
 )
 def test_jax_nn_softplus(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -337,30 +348,31 @@ def test_jax_nn_softplus(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.softplus",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.log_sigmoid",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("float"),
-        large_abs_safety_factor=2,
-        small_abs_safety_factor=2,
+        min_value=-1,
+        max_value=1,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.log_sigmoid"
     ),
 )
 def test_jax_nn_log_sigmoid(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -369,14 +381,17 @@ def test_jax_nn_log_sigmoid(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.log_sigmoid",
+        rtol=1e-02,
+        atol=1e-02,
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.log_softmax",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("float"),
         large_abs_safety_factor=2,
@@ -386,17 +401,17 @@ def test_jax_nn_log_sigmoid(
         min_num_dims=1,
     ),
     axis=helpers.ints(min_value=-1, max_value=0),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.log_softmax"
-    ),
 )
 def test_jax_nn_log_softmax(
+    *,
     dtype_and_x,
     axis,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -405,17 +420,19 @@ def test_jax_nn_log_softmax(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.log_softmax",
-        rtol=1e-3,
-        atol=1e-3,
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
+        rtol=1e-02,
+        atol=1e-02,
         x=x[0],
         axis=axis,
     )
 
 
-@handle_cmd_line_args
-@given(
+# glu
+@handle_frontend_test(
+    fn_tree="jax.nn.glu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("float"),
         large_abs_safety_factor=2,
@@ -427,17 +444,17 @@ def test_jax_nn_log_softmax(
         max_dim_size=4,
     ),
     axis=helpers.ints(min_value=-1, max_value=0),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.glu"
-    ),
 )
 def test_jax_nn_glu(
+    *,
     dtype_and_x,
     axis,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -446,17 +463,18 @@ def test_jax_nn_glu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.glu",
-        rtol=1e-3,
-        atol=1e-3,
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
+        rtol=1e-01,
+        atol=1e-01,
         x=x[0],
         axis=axis,
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.normalize",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
@@ -471,11 +489,9 @@ def test_jax_nn_glu(
         max_value=1,
     ),
     where=st.none(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.normalize"
-    ),
 )
 def test_jax_nn_normalize(
+    *,
     dtype_and_x,
     axis,
     epsilon,
@@ -483,7 +499,9 @@ def test_jax_nn_normalize(
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtypes, xs = dtype_and_x
 
@@ -493,8 +511,11 @@ def test_jax_nn_normalize(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.normalize",
+        rtol=1e-02,
+        atol=1e-02,
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=xs[0],
         axis=axis,
         mean=xs[1],
@@ -504,24 +525,24 @@ def test_jax_nn_normalize(
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.hard_tanh",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.hard_tanh"
-    ),
 )
 def test_jax_nn_hard_tanh(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -530,32 +551,33 @@ def test_jax_nn_hard_tanh(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.hard_tanh",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.celu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
-        large_abs_safety_factor=2,
-        small_abs_safety_factor=2,
+        min_value=-5,
+        max_value=5,
         safety_factor_scale="linear",
         num_arrays=2,
         shared_dtype=True,
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.celu"
     ),
 )
 def test_jax_nn_celu(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtypes, xs = dtype_and_x
     helpers.test_frontend_function(
@@ -564,33 +586,35 @@ def test_jax_nn_celu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.celu",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=xs[0],
         alpha=xs[1],
     )
 
 
-@handle_cmd_line_args
-@given(
+# elu
+@handle_frontend_test(
+    fn_tree="jax.nn.elu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
-        large_abs_safety_factor=2,
-        small_abs_safety_factor=2,
+        min_value=-5,
+        max_value=5,
         safety_factor_scale="linear",
         num_arrays=2,
         shared_dtype=True,
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.elu"
-    ),
 )
 def test_jax_nn_elu(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtypes, xs = dtype_and_x
     helpers.test_frontend_function(
@@ -599,15 +623,16 @@ def test_jax_nn_elu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.elu",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=xs[0],
         alpha=xs[1],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.logsumexp",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
@@ -619,11 +644,9 @@ def test_jax_nn_elu(
     axis=st.just(None),
     keepdims=st.booleans(),
     return_sign=st.booleans(),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.logsumexp"
-    ),
 )
 def test_jax_nn_logsumexp(
+    *,
     dtype_and_x,
     axis,
     keepdims,
@@ -631,7 +654,9 @@ def test_jax_nn_logsumexp(
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtypes, xs = dtype_and_x
     helpers.test_frontend_function(
@@ -640,8 +665,9 @@ def test_jax_nn_logsumexp(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.logsumexp",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         a=xs[0],
         axis=axis,
         b=xs[1],
@@ -650,24 +676,24 @@ def test_jax_nn_logsumexp(
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.swish",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("float"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.swish"
     ),
 )
 def test_jax_nn_swish(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -676,30 +702,31 @@ def test_jax_nn_swish(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.swish",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.hard_swish",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("float"),
-        large_abs_safety_factor=2,
-        small_abs_safety_factor=2,
+        min_value=-10,
+        max_value=10,
         safety_factor_scale="linear",
-    ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.hard_swish"
     ),
 )
 def test_jax_nn_hard_swish(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtype, x = dtype_and_x
     helpers.test_frontend_function(
@@ -708,29 +735,32 @@ def test_jax_nn_hard_swish(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.hard_swish",
+        rtol=1e-02,
+        atol=1e-02,
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=x[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.hard_silu",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.hard_silu"
-    ),
 )
 def test_jax_nn_hard_silu(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtypes, xs = dtype_and_x
     helpers.test_frontend_function(
@@ -739,29 +769,30 @@ def test_jax_nn_hard_silu(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.hard_silu",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=xs[0],
     )
 
 
-@handle_cmd_line_args
-@given(
+@handle_frontend_test(
+    fn_tree="jax.nn.hard_sigmoid",
     dtype_and_x=helpers.dtype_and_values(
         available_dtypes=helpers.get_dtypes("numeric"),
         large_abs_safety_factor=2,
         small_abs_safety_factor=2,
     ),
-    num_positional_args=helpers.num_positional_args(
-        fn_name="ivy.functional.frontends.jax.nn.hard_sigmoid"
-    ),
 )
 def test_jax_nn_hard_sigmoid(
+    *,
     dtype_and_x,
     as_variable,
     num_positional_args,
     native_array,
-    fw,
+    on_device,
+    fn_tree,
+    frontend,
 ):
     input_dtypes, xs = dtype_and_x
     helpers.test_frontend_function(
@@ -770,7 +801,8 @@ def test_jax_nn_hard_sigmoid(
         with_out=False,
         num_positional_args=num_positional_args,
         native_array_flags=native_array,
-        frontend="jax",
-        fn_tree="nn.hard_sigmoid",
+        frontend=frontend,
+        fn_tree=fn_tree,
+        on_device=on_device,
         x=xs[0],
     )

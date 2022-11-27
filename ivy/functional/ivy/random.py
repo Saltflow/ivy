@@ -97,6 +97,7 @@ def random_uniform(
     shape: Optional[Union[ivy.Shape, ivy.NativeShape]] = None,
     device: Optional[Union[ivy.Device, ivy.NativeDevice]] = None,
     dtype: Optional[Union[ivy.Dtype, ivy.NativeDtype]] = None,
+    seed: Optional[int] = None,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """Draws samples from a uniform distribution. Samples are uniformly distributed over
@@ -121,8 +122,10 @@ def random_uniform(
         device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
         (Default value = None).
     dtype
-         output array data type. If ``dtype`` is ``None``, the output array data
-         type will be the default floating-point data type. Default ``None``
+        output array data type. If ``dtype`` is ``None``, the output array data
+        type will be the default floating-point data type. Default ``None``
+    seed
+        A python integer. Used to create a random seed distribution
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -160,14 +163,14 @@ def random_uniform(
     ivy.array([[1.81, 1.8 ],
                [1.32, 1.43]])
 
-    >>> ivy.random_uniform(low=1.0, high=2.0, shape=(2,2), device='cpu', \
-                           dtype='int32')
+    >>> ivy.random_uniform(low=1.0, high=2.0, shape=(2,2), device='cpu',
+    ...                    dtype='int32')
     ivy.array([[1, 1],
                [1, 1]])
 
     >>> z = ivy.zeros((1,2))
-    >>> ivy.random_uniform(low=1.0, high=2.0, shape=(1,2), device='cpu', \
-                           dtype='float64', out=z)
+    >>> ivy.random_uniform(low=1.0, high=2.0, shape=(1,2), device='cpu',
+    ...                    dtype='float64', out=z)
     ivy.array([[1.34, 1.02]])
 
     >>> x = ivy.array([4.8, 5.6])
@@ -190,7 +193,7 @@ def random_uniform(
     ivy.array([5. , 7.3])
     """
     return ivy.current_backend().random_uniform(
-        low=low, high=high, shape=shape, device=device, dtype=dtype, out=out
+        low=low, high=high, shape=shape, device=device, dtype=dtype, out=out, seed=seed
     )
 
 
@@ -270,14 +273,14 @@ def random_normal(
     ivy.array([[ 2.91 ,  1.3  ],
                [ 3.37 , -0.799]])
 
-    >>> ivy.random_normal(mean=1.0, std=2.0, shape=(2,2), device='cpu', \
-                          dtype='int32')
+    >>> ivy.random_normal(mean=1.0, std=2.0, shape=(2,2), device='cpu',
+    ...                   dtype='int32')
     ivy.array([[ 0, -1],
                [ 0,  3]])
 
     >>> z = ivy.zeros((1,2))
-    >>> ivy.random_normal(mean=1.0, std=2.0, shape=(1,2), device='cpu', \
-                          dtype='float64', out=z)
+    >>> ivy.random_normal(mean=1.0, std=2.0, shape=(1,2), device='cpu',
+    ...                   dtype='float64', out=z)
     ivy.array([[-2.01, -1.95]])
 
     >>> x = ivy.array([4.8, 5.6])
@@ -318,8 +321,9 @@ def multinomial(
     probs: Optional[Union[ivy.Array, ivy.NativeArray]] = None,
     replace: bool = True,
     device: Optional[Union[ivy.Device, ivy.NativeDevice]] = None,
+    seed: Optional[int] = None,
     out: Optional[ivy.Array] = None,
-) -> ivy.array:
+) -> ivy.Array:
     """
     Draws samples from a multinomial distribution. Specifically, returns a tensor
     where each row contains num_samples indices sampled from the multinomial probability
@@ -337,10 +341,12 @@ def multinomial(
         The unnormalized probabilities for all elements in population,
         default is uniform *[batch_shape, population_size]*
     replace
-        Whether to replace samples once they've been drawn. Default is True.
+        Whether to replace samples once they've been drawn. Default is ``True``.
     device
         device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
         (Default value = None)
+    seed
+        A python integer. Used to create a random seed distribution
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -375,8 +381,8 @@ def multinomial(
     >>> print(y)
     ivy.array([[0, 4, 3, 4, 5], [1, 1, 0, 3, 2]])
 
-    >>> y = ivy.multinomial(7, 5, batch_size=2, probs=ivy.array([[1/7]*7, [1/7]*7]),\
-                            replace=False)
+    >>> y = ivy.multinomial(7, 5, batch_size=2, probs=ivy.array([[1/7]*7, [1/7]*7]),
+    ...                     replace=False)
     >>> print(y)
     ivy.array([[2, 6, 1, 0, 3], [1, 0, 2, 5, 6]])
 
@@ -386,16 +392,16 @@ def multinomial(
     >>> print(y)
     ivy.array([5, 7, 4, 2, 1])
 
-    >>> y = ivy.multinomial(10, 5, batch_size=2,\
-                            probs=ivy.native_array([[1/10]*10, [1/10]*10]))
+    >>> y = ivy.multinomial(10, 5, batch_size=2,
+    ...                     probs=ivy.native_array([[1/10]*10, [1/10]*10]))
     >>> print(y)
     ivy.array([[8, 0, 4, 1, 7], [2, 3, 4, 9, 3]])
 
-    >>> y = ivy.multinomial(10, 5, batch_size=2,\
-                     probs=ivy.native_array([[1/10]*10, [1/10]*10]), replace=False)
+    >>> y = ivy.multinomial(10, 5, batch_size=2,
+    ...                     probs=ivy.native_array([[1/10]*10, [1/10]*10]),
+    ...                     replace=False)
     >>> print(y)
     ivy.array([[0, 2, 6, 9, 1], [6, 7, 2, 4, 3]])
-
     """
     return ivy.current_backend().multinomial(
         population_size,
@@ -404,6 +410,7 @@ def multinomial(
         probs=probs,
         replace=replace,
         device=device,
+        seed=seed,
         out=out,
     )
 
@@ -421,6 +428,7 @@ def randint(
     shape: Optional[Union[ivy.Shape, ivy.NativeShape]] = None,
     device: Optional[Union[ivy.Device, ivy.NativeDevice]] = None,
     dtype: Optional[Union[ivy.Dtype, ivy.NativeDtype]] = None,
+    seed: Optional[int] = None,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """Returns an array filled with random integers generated uniformly between
@@ -443,6 +451,8 @@ def randint(
     dtype
         output array data type. If ``dtype`` is ``None``, the output array data
         type will be the default integer data type. Default ``None``
+    seed
+        A python integer. Used to create a random seed distribution
     out
         optional output array, for writing the result to. It must have a shape
         that the inputs broadcast to.
@@ -477,7 +487,7 @@ def randint(
 
     """
     return ivy.current_backend().randint(
-        low, high, shape=shape, device=device, dtype=dtype, out=out
+        low, high, shape=shape, device=device, dtype=dtype, seed=seed, out=out
     )
 
 
@@ -505,7 +515,11 @@ def seed(*, seed_value: int = 0) -> None:
 @handle_nestable
 @handle_exceptions
 def shuffle(
-    x: Union[ivy.Array, ivy.NativeArray], /, *, out: Optional[ivy.Array] = None
+    x: Union[ivy.Array, ivy.NativeArray],
+    /,
+    *,
+    seed: Optional[int] = None,
+    out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """Shuffles the given array along axis 0.
 
@@ -513,6 +527,8 @@ def shuffle(
     ----------
     x
         Input array. Should have a numeric data type.
+    seed
+        A python integer. Used to create a random seed distribution
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -524,10 +540,53 @@ def shuffle(
 
     Examples
     --------
+    With :class:`ivy.Array` input:
+
     >>> x = ivy.array([1, 2, 3, 4, 5])
     >>> y = ivy.shuffle(x)
     >>> print(y)
     ivy.array([2, 1, 4, 3, 5])
 
+    >>> x = ivy.array([1, 3, 5, 7])
+    >>> y = ivy.shuffle(x, seed=394)
+    >>> print(y)
+    ivy.array([3, 1, 5, 7])
+
+    >>> x = ivy.array([1, 0, 5])
+    >>> y = ivy.array([0, 0, 0])
+    >>> ivy.shuffle(x, seed=394, out=y)
+    >>> print(y)
+    ivy.array([0, 1, 5])
+
+    With :class:`ivy.Container` input:
+
+    >>> x = ivy.Container(a=ivy.array([5, 2, 9]),
+    ...                   b=ivy.array([7, 1, 6]))
+    >>> y = ivy.shuffle(x)
+    >>> print(y)
+    {
+        a: ivy.array([5, 9, 2]),
+        b: ivy.array([6, 1, 7])
+    }
+
+    >>> x = ivy.Container(a=ivy.array([7, 4, 5]),
+    ...                   b=ivy.array([9, 8, 2]))
+    >>> y = ivy.Container(a=ivy.array([0, 0, 0]),
+    ...                   b=ivy.array([0, 0, 0]))
+    >>> ivy.shuffle(x, seed=17, out=y)
+    >>> print(y)
+    {
+        a: ivy.array([7, 5, 4]),
+        b: ivy.array([9, 2, 8])
+    }
+
+    >>> x = ivy.Container(a=ivy.array([8, 2, 5]),
+    ...                   b=ivy.array([3, 9, 0]))
+    >>> ivy.shuffle(x, seed=17, out=x)
+    >>> print(x)
+    {
+        a: ivy.array([2, 8, 5]),
+        b: ivy.array([3, 0, 9])
+    }
     """
-    return ivy.current_backend(x).shuffle(x, out=out)
+    return ivy.current_backend(x).shuffle(x, seed=seed, out=out)

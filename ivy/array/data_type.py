@@ -5,6 +5,9 @@ from typing import Tuple, Optional, List, Union
 # local
 import ivy
 
+Finfo = None
+Iinfo = None
+
 
 class ArrayWithDataTypes(abc.ABC):
     def astype(
@@ -186,10 +189,17 @@ class ArrayWithDataTypes(abc.ABC):
         """
         return ivy.dtype(self._data, as_native)
 
-    def finfo(self: ivy.Array):
+    def finfo(self: ivy.Array, /) -> Finfo:
         return ivy.finfo(self._data)
 
-    def iinfo(self: ivy.Array):
+    def iinfo(self: ivy.Array, /) -> Iinfo:
+        """
+        Examples
+        --------
+        >>> x = ivy.array([-119,122,14], dtype=ivy.int8))
+        >>> x.iinfo()
+        iinfo(min=-128, max=127, dtype=int8)
+        """
         return ivy.iinfo(self._data)
 
     def is_bool_dtype(self: ivy.Array) -> bool:

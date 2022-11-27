@@ -9,6 +9,7 @@ from ivy.func_wrapper import (
     to_native_arrays_and_back,
     handle_nestable,
     integer_arrays_to_float,
+    handle_array_like,
 )
 from ivy.exceptions import handle_exceptions
 
@@ -21,6 +22,7 @@ from ivy.exceptions import handle_exceptions
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def abs(
     x: Union[float, ivy.Array, ivy.NativeArray],
     /,
@@ -112,6 +114,7 @@ def abs(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def acos(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -199,6 +202,7 @@ def acos(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def acosh(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -285,6 +289,7 @@ def acosh(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def add(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -404,6 +409,7 @@ def add(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def asin(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -479,8 +485,8 @@ def asin(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 0.1, 0.2]), \
-                          b=ivy.array([0.3, 0.4, 0.5]))
+    >>> x = ivy.Container(a=ivy.array([0., 0.1, 0.2]),
+    ...                   b=ivy.array([0.3, 0.4, 0.5]))
     >>> y = ivy.asin(x)
     >>> print(y)
     {a:ivy.array([0.,0.1,0.201]),b:ivy.array([0.305,0.412,0.524])}
@@ -514,6 +520,7 @@ def asin(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def asinh(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -590,8 +597,8 @@ def asinh(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 1, 2]),\
-                            b=ivy.array([4.2, -5.3, -0, -2.3]))
+    >>> x = ivy.Container(a=ivy.array([0., 1, 2]),
+    ...                   b=ivy.array([4.2, -5.3, -0, -2.3]))
     >>> y = ivy.asinh(x)
     >>> print(y)
     {
@@ -607,6 +614,7 @@ def asinh(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def atan(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -696,6 +704,7 @@ def atan(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def atan2(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -848,8 +857,8 @@ def atan2(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 2.6, -3.5]),\
-                          b=ivy.array([4.5, -5.3, -0]))
+    >>> x = ivy.Container(a=ivy.array([0., 2.6, -3.5]),
+    ...                   b=ivy.array([4.5, -5.3, -0]))
     >>> y = ivy.array([3.0, 2.0, 1.0])
     >>> x.atan2(y)
     {
@@ -857,10 +866,10 @@ def atan2(
         b: ivy.array([0.983, -1.21, 0.])
     }
 
-    >>> x = ivy.Container(a=ivy.array([0., 2.6, -3.5]),\
-                          b=ivy.array([4.5, -5.3, -0, -2.3]))
-    >>> y = ivy.Container(a=ivy.array([-2.5, 1.75, 3.5]),\
-                          b=ivy.array([2.45, 6.35, 0, 1.5]))
+    >>> x = ivy.Container(a=ivy.array([0., 2.6, -3.5]),
+    ...                   b=ivy.array([4.5, -5.3, -0, -2.3]))
+    >>> y = ivy.Container(a=ivy.array([-2.5, 1.75, 3.5]),
+    ...                   b=ivy.array([2.45, 6.35, 0, 1.5]))
     >>> z = x.atan2(y)
     >>> print(z)
     {
@@ -876,6 +885,7 @@ def atan2(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def atanh(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -951,6 +961,7 @@ def atanh(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def bitwise_and(
     x1: Union[int, bool, ivy.Array, ivy.NativeArray],
     x2: Union[int, bool, ivy.Array, ivy.NativeArray],
@@ -1049,35 +1060,6 @@ def bitwise_and(
         a: ivy.array([True, False]),
         b: ivy.array([False, True])
     }
-
-    Instance Method Examples
-    ------------------------
-
-    Using :class:`ivy.Array` instance method:
-
-    >>> x = ivy.array([True, False])
-    >>> y = ivy.array([True, True])
-    >>> x.bitwise_and(y, out=y)
-    >>> print(y)
-    ivy.array([ True, False])
-
-    >>> x = ivy.array([[7],[8],[9]])
-    >>> y = ivy.native_array([[10],[11],[12]])
-    >>> z = x.bitwise_and(y)
-    >>> print(z)
-    ivy.array([[2],[8],[8]])
-
-    Using :class:`ivy.Container` instance method:
-
-    >>> x = ivy.Container(a=ivy.array([True, True]), b=ivy.array([False, True]))
-    >>> y = ivy.Container(a=ivy.array([False, True]), b=ivy.array([False, True]))
-    >>> x.bitwise_and(y, out=y)
-    >>> print(y)
-    {
-        a: ivy.array([False, True]),
-        b: ivy.array([False, True])
-    }
-
     """
     return ivy.current_backend(x1, x2).bitwise_and(x1, x2, out=out)
 
@@ -1086,6 +1068,7 @@ def bitwise_and(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def bitwise_invert(
     x: Union[int, bool, ivy.Array, ivy.NativeArray],
     /,
@@ -1133,6 +1116,7 @@ def bitwise_invert(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def bitwise_left_shift(
     x1: Union[int, ivy.Array, ivy.NativeArray],
     x2: Union[int, ivy.Array, ivy.NativeArray],
@@ -1180,6 +1164,7 @@ def bitwise_left_shift(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def bitwise_or(
     x1: Union[int, bool, ivy.Array, ivy.NativeArray],
     x2: Union[int, bool, ivy.Array, ivy.NativeArray],
@@ -1267,6 +1252,7 @@ def bitwise_or(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def bitwise_right_shift(
     x1: Union[int, ivy.Array, ivy.NativeArray],
     x2: Union[int, ivy.Array, ivy.NativeArray],
@@ -1338,8 +1324,8 @@ def bitwise_right_shift(
 
     With :class:`ivy.NativeArray` input:
 
-    >>> a = ivy.native_array([[32, 40, 55], \
-                              [16, 33, 170]])
+    >>> a = ivy.native_array([[32, 40, 55],
+    ...                       [16, 33, 170]])
     >>> b = ivy.native_array([5, 2, 1])
     >>> y = ivy.bitwise_right_shift(a, b)
     >>> print(y)
@@ -1356,8 +1342,8 @@ def bitwise_right_shift(
 
     With one :class:`ivy.Container` input:
 
-    >>> a = ivy.Container(a = ivy.array([100, 200]), \
-                          b = ivy.array([125, 243]))
+    >>> a = ivy.Container(a = ivy.array([100, 200]),
+    ...                   b = ivy.array([125, 243]))
     >>> b = ivy.array([3, 6])
     >>> y = ivy.bitwise_right_shift(a, b)
     >>> print(y)
@@ -1368,12 +1354,12 @@ def bitwise_right_shift(
 
     With multiple :class:`ivy.Container` inputs:
 
-    >>> a = ivy.Container(a = ivy.array([10, 25, 42]), \
-                          b = ivy.array([64, 65]), \
-                          c = ivy.array([200, 225, 255]))
-    >>> b = ivy.Container(a = ivy.array([0, 1, 2]), \
-                          b = ivy.array([6]), \
-                          c = ivy.array([4, 5, 6]))
+    >>> a = ivy.Container(a = ivy.array([10, 25, 42]),
+    ...                   b = ivy.array([64, 65]),
+    ...                   c = ivy.array([200, 225, 255]))
+    >>> b = ivy.Container(a = ivy.array([0, 1, 2]),
+    ...                   b = ivy.array([6]),
+    ...                   c = ivy.array([4, 5, 6]))
     >>> y = ivy.bitwise_right_shift(a, b)
     >>> print(y)
     {
@@ -1389,6 +1375,7 @@ def bitwise_right_shift(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def bitwise_xor(
     x1: Union[int, bool, ivy.Array, ivy.NativeArray],
     x2: Union[int, bool, ivy.Array, ivy.NativeArray],
@@ -1494,27 +1481,6 @@ def bitwise_xor(
     a: ivy.array([-79, 24])
     }
 
-    Instance Method Examples
-    ------------------------
-
-    Using :class:`ivy.Array` instance method:
-
-    >>> a = ivy.array([[89, 51, 32], [14, 18, 19]])
-    >>> b = ivy.array([[[19, 26, 27], [22, 23, 20]]])
-    >>> y = a.bitwise_xor(b)
-    >>> print(y)
-    ivy.array([[[74,41,59],[24,5,7]]])
-
-    Using :class:`ivy.Container` instance method:
-
-    >>> x = ivy.Container(a = ivy.array([89]))
-    >>> b = ivy.array([90])
-    >>> y = ivy.Container(a = ivy.array([12]))
-    >>> b = ivy.array([78])
-    >>> z = x.bitwise_xor(y)
-    >>> print(z)
-    {a:ivy.array([85])}
-
     Operator Examples
     -----------------
 
@@ -1529,9 +1495,7 @@ def bitwise_xor(
     With :class:`ivy.Container` instances:
 
     >>> x = ivy.Container(a = ivy.array([89]))
-    >>> b = ivy.array([90])
     >>> y = ivy.Container(a = ivy.array([12]))
-    >>> b = ivy.array([78])
     >>> z = x ^ y
     >>> print(z)
     {a:ivy.array([85])}
@@ -1552,6 +1516,7 @@ def bitwise_xor(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def ceil(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -1628,8 +1593,8 @@ def ceil(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([2.5, 0.5, -1.4]),\
-                          b=ivy.array([5.4, -3.2, -0, 5.2]))
+    >>> x = ivy.Container(a=ivy.array([2.5, 0.5, -1.4]),
+    ...                   b=ivy.array([5.4, -3.2, -0, 5.2]))
     >>> y = ivy.ceil(x)
     >>> print(y)
     {
@@ -1645,6 +1610,7 @@ def ceil(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def cos(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -1680,6 +1646,7 @@ def cos(
         an array containing the cosine of each element in ``x``. The returned array must
         have a floating-point data type determined by :ref:`type-promotion`.
 
+
     This method conforms to the
     `Array API Standard <https://data-apis.org/array-api/latest/>`_.
     This docstring is an extension of the
@@ -1705,13 +1672,6 @@ def cos(
     >>> print(y)
     ivy.array([-0.654, 1., 0.96])
 
-    With :class:`ivy.NativeArray` input:
-
-    >>> x = ivy.array([1., 0., 2.])
-    >>> y = ivy.cos(x)
-    >>> print(y)
-    ivy.array([0.54 , 1., -0.416])
-
     With :class:`ivy.Container` input:
 
     >>> x = ivy.Container(a=ivy.array([0., -1, 1]), b=ivy.array([1., 0., -6]))
@@ -1730,6 +1690,7 @@ def cos(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def cosh(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -1791,8 +1752,8 @@ def cosh(
     >>> ivy.cosh(x, out=y)
     ivy.array([[1.67,4.57,13.6,12.3],[40.7,122.,368.,670.]])
 
-    >>> x = ivy.array([[1.1, 2.2, 3.3, 3.2], \
-                       [-4.4, -5.5, -6.6, -7.2]])
+    >>> x = ivy.array([[1.1, 2.2, 3.3, 3.2],
+    ...                [-4.4, -5.5, -6.6, -7.2]])
     >>> y = ivy.cosh(x)
     >>> print(y)
     ivy.array([[1.67,4.57,13.6,12.3],[40.7,122.,368.,670.]])
@@ -1826,6 +1787,7 @@ def cosh(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def divide(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -1918,6 +1880,7 @@ def divide(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def equal(
     x1: Union[float, ivy.Array, ivy.NativeArray, ivy.Container],
     x2: Union[float, ivy.Array, ivy.NativeArray, ivy.Container],
@@ -2012,6 +1975,7 @@ def equal(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def exp(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -2064,6 +2028,7 @@ def exp(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def expm1(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -2144,8 +2109,8 @@ def expm1(
 
     With :class:`ivy.Container` inputs:
 
-    >>> x = ivy.Container(a=ivy.array([-1, 0,]), \
-                        b=ivy.array([10, 1]))
+    >>> x = ivy.Container(a=ivy.array([-1, 0,]),
+    ...                   b=ivy.array([10, 1]))
     >>> ivy.expm1(x)
     {
         a: ivy.array([-0.632, 0.]),
@@ -2176,6 +2141,7 @@ def expm1(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def floor(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -2254,8 +2220,8 @@ def floor(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 1.5, -2.4]),\
-                          b=ivy.array([3.4, -4.2, -0, -1.2]))
+    >>> x = ivy.Container(a=ivy.array([0., 1.5, -2.4]),
+    ...                   b=ivy.array([3.4, -4.2, -0, -1.2]))
     >>> y = ivy.floor(x)
     >>> print(y)
     {
@@ -2271,6 +2237,7 @@ def floor(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def floor_divide(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -2365,6 +2332,7 @@ def floor_divide(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def greater(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -2435,8 +2403,8 @@ def greater(
     With a mix of :class:`ivy.Array` and :class:`ivy.Container` inputs:
 
     >>> x = ivy.array([[5.1, 2.3, -3.6]])
-    >>> y = ivy.Container(a=ivy.array([[4.], [5.], [6.]]),\
-                          b=ivy.array([[5.], [6.], [7.]]))
+    >>> y = ivy.Container(a=ivy.array([[4.], [5.], [6.]]),
+    ...                   b=ivy.array([[5.], [6.], [7.]]))
     >>> z = ivy.greater(x, y)
     >>> print(z)
     {
@@ -2450,10 +2418,10 @@ def greater(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([4, 5, 6]),\
-                          b=ivy.array([2, 3, 4]))
-    >>> y = ivy.Container(a=ivy.array([1, 2, 3]),\
-                          b=ivy.array([5, 6, 7]))
+    >>> x = ivy.Container(a=ivy.array([4, 5, 6]),
+    ...                   b=ivy.array([2, 3, 4]))
+    >>> y = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                   b=ivy.array([5, 6, 7]))
     >>> z = ivy.greater(x, y)
     >>> print(z)
     {
@@ -2469,6 +2437,7 @@ def greater(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def greater_equal(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -2581,10 +2550,10 @@ def greater_equal(
 
     Using :class:`ivy.Container` instance method:
 
-    >>> x = ivy.Container(a=ivy.array([4, 5, 6]),\
-                  b=ivy.array([2, 3, 4]))
-    >>> y = ivy.Container(a=ivy.array([1, 2, 3]),\
-                      b=ivy.array([5, 6, 7]))
+    >>> x = ivy.Container(a=ivy.array([4, 5, 6]),
+    ...                   b=ivy.array([2, 3, 4]))
+    >>> y = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                   b=ivy.array([5, 6, 7]))
     >>> z = x.greater_equal(y)
     >>> print(z)
     {a:ivy.array([True,True,True]),b:ivy.array([False,False,False])}
@@ -2630,6 +2599,7 @@ def greater_equal(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def less_equal(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -2708,6 +2678,7 @@ def less_equal(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def multiply(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -2757,11 +2728,16 @@ def multiply(
     ----------
     x1
         first input array. Should have a numeric data type.
+
     x2
-        second input array. Must be compatible with ``x1`` (see  ref:`Broadcasting`).
-        Should have a numeric data type.
+        second input array. Should have a numeric data type.
+        Must be compatible with ``x1``
+        The condition for compatibility is Broadcasting :  ``x1.shape!=x2.shape`` .
+        The arrays must be boradcastble to get a common shape for the output.
+
+
     out
-        optional output array, for writing the result to. It must have a shape that the
+        optional output array, for writing the array result to. It must have a shape that the
         inputs broadcast to.
 
 
@@ -2772,7 +2748,7 @@ def multiply(
 
     Both the description and the type hints above assumes an array input for simplicity,
     but this function is *nestable*, and therefore also accepts :class:`ivy.Container`
-    instances in place of any of the arguments
+    instances in place of any of the arguments.
 
     Returns
     -------
@@ -2780,6 +2756,31 @@ def multiply(
         an array containing the element-wise products. The returned array must have a
         data type determined by :ref:`Type Promotion Rules`.
 
+    Examples
+    --------
+    With :class:`ivy.Array` inputs:
+
+    >>> x1 = ivy.array([3., 5., 7.])
+    >>> x2 = ivy.array([4., 6., 8.])
+    >>> y = ivy.multiply(x1, x2)
+    >>> print(y)
+    ivy.array([12., 30., 56.])
+
+    With :class:`ivy.NativeArray` inputs:
+
+    >>> x1 = ivy.native_array([1., 3., 9.])
+    >>> x2 = ivy.native_array([4., 7.2, 1.])
+    >>> y = ivy.multiply(x1, x2)
+    >>> print(y)
+    ivy.array([ 4. , 21.6,  9. ])
+
+    With mixed :class:`ivy.Array` and :class:`ivy.NativeArray` inputs:
+
+    >>> x1 = ivy.array([8., 6., 7.])
+    >>> x2 = ivy.native_array([1., 2., 3.])
+    >>> y = ivy.multiply(x1, x2)
+    >>> print(y)
+    ivy.array([ 8., 12., 21.])
     """
     return ivy.current_backend(x1, x2).multiply(x1, x2, out=out)
 
@@ -2789,6 +2790,7 @@ def multiply(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def isfinite(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -2855,8 +2857,8 @@ def isfinite(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 999999999999]),\
-                          b=ivy.array([float('-0'), ivy.nan]))
+    >>> x = ivy.Container(a=ivy.array([0., 999999999999]),
+    ...                   b=ivy.array([float('-0'), ivy.nan]))
     >>> y = ivy.isfinite(x)
     >>> print(y)
     {
@@ -2874,8 +2876,8 @@ def isfinite(
 
     With :class:`ivy.Container` instance method:
 
-    >>> x = ivy.Container(a=ivy.array([0., 999999999999]),\
-                          b=ivy.array([float('-0'), ivy.nan]))
+    >>> x = ivy.Container(a=ivy.array([0., 999999999999]),
+    ...                   b=ivy.array([float('-0'), ivy.nan]))
     >>> y = x.isfinite()
     >>> print(y)
     {
@@ -2891,6 +2893,7 @@ def isfinite(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def isinf(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -2958,17 +2961,10 @@ def isinf(
        [False, False, False],
        [False, False, False]])
 
-    With :class:`ivy.NativeArray` inputs:
-
-    >>> x = ivy.native_array([[1], [5], [-ivy.inf]])
-    >>> z = ivy.isinf(x)
-    >>> print(z)
-    ivy.array([[False],[False],[True]])
-
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([-1, -float('inf'), 1.23]), \
-                          b=ivy.array([float('inf'), 3.3, -4.2]))
+    >>> x = ivy.Container(a=ivy.array([-1, -float('inf'), 1.23]),
+    ...                   b=ivy.array([float('inf'), 3.3, -4.2]))
     >>> z = ivy.isinf(x)
     >>> print(z)
     {
@@ -3003,16 +2999,11 @@ def isinf(
         [False, False, False],
         [False, False, False]])
 
-    With :class:`ivy.NativeArray` inputs:
-
-    >>> x = ivy.native_array([[1], [5], [-ivy.inf]])
-    >>> x.isinf()
-    ivy.array([[False],[False],[True]])
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([-1, -float('inf'), 1.23]), \
-        b=ivy.array([float('inf'), 3.3, -4.2]))
+    >>> x = ivy.Container(a=ivy.array([-1, -float('inf'), 1.23]),
+    ...                   b=ivy.array([float('inf'), 3.3, -4.2]))
     >>> x.isinf()
     {
         a: ivy.array([False, True, False]),
@@ -3024,8 +3015,8 @@ def isinf(
     ------------------------
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([-1, -float('inf'), 1.23]), \
-                          b=ivy.array([float('inf'), 3.3, -4.2]))
+    >>> x = ivy.Container(a=ivy.array([-1, -float('inf'), 1.23]),
+    ...                   b=ivy.array([float('inf'), 3.3, -4.2]))
     >>> z = ivy.Container.static_isinf(x)
     >>> print(z)
     {
@@ -3042,6 +3033,7 @@ def isinf(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def isnan(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -3114,19 +3106,12 @@ def isnan(
        [False, False, False],
        [False, False, False]])
 
-    With :class:`ivy.NativeArray` inputs:
 
-    >>> x = ivy.native_array([[1], [5], [-ivy.nan]])
-    >>> z = ivy.isnan(x)
-    >>> print(z)
-    ivy.array([[False],
-        [False],
-        [True]])
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([-1, -float('nan'), 1.23]), \
-                          b=ivy.array([float('nan'), 3.3, -4.2]))
+    >>> x = ivy.Container(a=ivy.array([-1, -float('nan'), 1.23]),
+    ...                   b=ivy.array([float('nan'), 3.3, -4.2]))
     >>> z = ivy.isnan(x)
     >>> print(z)
     {
@@ -3167,18 +3152,11 @@ def isnan(
         [False, False, False],
         [False, False, False]])
 
-    With :class:`ivy.NativeArray` inputs:
-
-    >>> x = ivy.native_array([[1], [5], [-ivy.nan]])
-    >>> x.isnan()
-    ivy.array([[False],
-        [False],
-        [True]])
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([-1, -float('nan'), 1.23]), \
-        b=ivy.array([float('nan'), 3.3, -4.2]))
+    >>> x = ivy.Container(a=ivy.array([-1, -float('nan'), 1.23]),
+    ...                   b=ivy.array([float('nan'), 3.3, -4.2]))
     >>> x.isnan()
     {
         a: ivy.array([False, True, False]),
@@ -3189,8 +3167,8 @@ def isnan(
     ------------------------
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([-1, -float('nan'), 1.23]), \
-                          b=ivy.array([float('nan'), 3.3, -4.2]))
+    >>> x = ivy.Container(a=ivy.array([-1, -float('nan'), 1.23]),
+    ...                   b=ivy.array([float('nan'), 3.3, -4.2]))
     >>> z = ivy.Container.static_isnan(x)
     >>> print(z)
     {
@@ -3206,6 +3184,7 @@ def isnan(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def less(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -3267,8 +3246,8 @@ def less(
     With a mix of :class:`ivy.Array` and :class:`ivy.Container` inputs:
 
     >>> x = ivy.array([[5.1, 2.3, -3.6]])
-    >>> y = ivy.Container(a=ivy.array([[4.], [5.], [6.]]),\
-                          b=ivy.array([[5.], [6.], [7.]]))
+    >>> y = ivy.Container(a=ivy.array([[4.], [5.], [6.]]),
+    ...                   b=ivy.array([[5.], [6.], [7.]]))
     >>> z = ivy.less(x, y)
     >>> print(z)
     {
@@ -3300,6 +3279,7 @@ def less(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def log(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -3335,6 +3315,41 @@ def log(
         The returned array must have a floating-point data type determined by
         :ref:`type-promotion`.
 
+    Examples
+    --------
+    With :class:`ivy.Array` input:
+
+    >>> x = ivy.array([4.0, 1, -0.0, -5.0])
+    >>> y = ivy.log(x)
+    >>> print(y)
+    ivy.array([1.39, 0., -inf, nan])
+
+    >>> x = ivy.array([[float('nan'), 1, 5.0, float('+inf')],
+    ...                [+0, -1.0, -5, float('-inf')]])
+    >>> y = ivy.log(x)
+    >>> print(y)
+    ivy.array([[nan, 0., 1.61, inf],
+               [-inf, nan, nan, nan]])
+
+    With :class:`ivy.NativeArray` input:
+
+    >>> x = ivy.native_array([5.78, float('-inf')])
+    >>> y = ivy.log(x)
+    >>> print(y)
+    ivy.array([1.75, nan])
+
+    With :class:`ivy.Container` input:
+
+    >>> x = ivy.Container(a=ivy.array([0.0, float('nan')]),
+    ...                   b=ivy.array([-0., -3.9, float('+inf')]),
+    ...                   c=ivy.array([7.9, 1.1, 1.]))
+    >>> y = ivy.log(x)
+    >>> print(y)
+    {
+        a: ivy.array([-inf, nan]),
+        b: ivy.array([-inf, nan, inf]),
+        c: ivy.array([2.07, 0.0953, 0.])
+    }
     """
     return ivy.current_backend(x).log(x, out=out)
 
@@ -3344,6 +3359,7 @@ def log(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def log10(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -3398,8 +3414,8 @@ def log10(
     >>> print(y)
     ivy.array([0.602, 0., -inf, nan])
 
-    >>> x = ivy.array([[float('nan'), 1, 5.0, float('+inf')],\
-                       [+0, -1.0, -5, float('-inf')]])
+    >>> x = ivy.array([[float('nan'), 1, 5.0, float('+inf')],
+    ...                [+0, -1.0, -5, float('-inf')]])
     >>> y = ivy.log10(x)
     >>> print(y)
     ivy.array([[nan, 0., 0.699, inf],
@@ -3414,9 +3430,9 @@ def log10(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0.0, float('nan')]),\
-                          b=ivy.array([-0., -3.9, float('+inf')]),\
-                          c=ivy.array([7.9, 1.1, 1.]))
+    >>> x = ivy.Container(a=ivy.array([0.0, float('nan')]),
+    ...                   b=ivy.array([-0., -3.9, float('+inf')]),
+    ...                   c=ivy.array([7.9, 1.1, 1.]))
     >>> y = ivy.log10(x)
     >>> print(y)
     {
@@ -3433,6 +3449,7 @@ def log10(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def log1p(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -3534,6 +3551,7 @@ def log1p(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def log2(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -3588,6 +3606,7 @@ def log2(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def logaddexp(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -3656,8 +3675,8 @@ def logaddexp(
     With one :class:`ivy.Container` input:
 
     >>> x = ivy.array([[5.1, 2.3, -3.6]])
-    >>> y = ivy.Container(a=ivy.array([[4.], [5.], [6.]]),\
-                          b=ivy.array([[5.], [6.], [7.]]))
+    >>> y = ivy.Container(a=ivy.array([[4.], [5.], [6.]]),
+    ...                   b=ivy.array([[5.], [6.], [7.]]))
     >>> z = ivy.logaddexp(x, y)
     >>> print(z)
     {
@@ -3691,6 +3710,7 @@ def logaddexp(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def logical_and(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -3743,10 +3763,10 @@ def logical_and(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([False, True, True]), \
-        b=ivy.array([True, False, False]))
-    >>> y = ivy.Container(a=ivy.array([True, True, False]), \
-        b=ivy.array([False, False, True]))
+    >>> x = ivy.Container(a=ivy.array([False, True, True]),
+    ...                   b=ivy.array([True, False, False]))
+    >>> y = ivy.Container(a=ivy.array([True, True, False]),
+    ...                   b=ivy.array([False, False, True]))
     >>> print(ivy.logical_and(y, x))
     {
         a: ivy.array([False, True, False]),
@@ -3768,8 +3788,8 @@ def logical_and(
     ivy.array([True,False,False])
 
 
-    >>> x = ivy.Container(a=ivy.array([False, True, True]), \
-        b=ivy.array([True, False, False]))
+    >>> x = ivy.Container(a=ivy.array([False, True, True]),
+    ...                   b=ivy.array([True, False, False]))
     >>> y = ivy.array([True, False, True])
     >>> print(ivy.logical_and(y, x))
     {
@@ -3777,8 +3797,8 @@ def logical_and(
         b: ivy.array([True, False, False])
     }
 
-    >>> x = ivy.Container(a=ivy.array([False, True, True]), \
-        b=ivy.array([True, False, False]))
+    >>> x = ivy.Container(a=ivy.array([False, True, True]),
+    ...                   b=ivy.array([True, False, False]))
     >>> y = ivy.array([True, False, True])
     >>> ivy.logical_and(y, x, out=x)
     >>> print(x)
@@ -3795,6 +3815,7 @@ def logical_and(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def logical_not(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -3924,6 +3945,7 @@ def logical_not(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def logical_or(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -4001,10 +4023,10 @@ def logical_or(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([False, False, True]), \
-                            b=ivy.array([True, False, True]))
-    >>> y = ivy.Container(a=ivy.array([False, True, False]), \
-                            b=ivy.array([True, True, False]))
+    >>> x = ivy.Container(a=ivy.array([False, False, True]),
+    ...                   b=ivy.array([True, False, True]))
+    >>> y = ivy.Container(a=ivy.array([False, True, False]),
+    ...                   b=ivy.array([True, True, False]))
     >>> z = ivy.logical_or(x, y)
     >>> print(z)
     {
@@ -4033,10 +4055,10 @@ def logical_or(
 
     With :class:`ivy.Container` static method:
 
-    >>> x = ivy.Container(a=ivy.array([False, False, True]), \
-                        b=ivy.array([True, False, True]))
-    >>> y = ivy.Container(a=ivy.array([False, True, False]), \
-                            b=ivy.array([True, True, False]))
+    >>> x = ivy.Container(a=ivy.array([False, False, True]),
+    ...                   b=ivy.array([True, False, True]))
+    >>> y = ivy.Container(a=ivy.array([False, True, False]),
+    ...                   b=ivy.array([True, True, False]))
     >>> z = ivy.Container.static_logical_or(x, y)
     >>> print(z)
     {
@@ -4051,6 +4073,7 @@ def logical_or(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def logical_xor(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
@@ -4146,6 +4169,7 @@ def logical_xor(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def negative(
     x: Union[float, ivy.Array, ivy.NativeArray],
     /,
@@ -4194,8 +4218,8 @@ def negative(
     >>> print(y)
     ivy.array([-0.,1.,0.5,-2.,-3.])
 
-    >>> x = ivy.array([[1.1,2.2,3.3], \
-                       [-4.4,-5.5,-6.6]])
+    >>> x = ivy.array([[1.1,2.2,3.3],
+    ...                [-4.4,-5.5,-6.6]])
     >>> ivy.negative(x,out=x)
     >>> print(x)
     ivy.array([[-1.1,-2.2,-3.3],[4.4,5.5,6.6]])
@@ -4209,8 +4233,8 @@ def negative(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0.,1.,2.]),\
-                         b=ivy.array([3.,4.,-5.]))
+    >>> x = ivy.Container(a=ivy.array([0.,1.,2.]),
+    ...                   b=ivy.array([3.,4.,-5.]))
     >>> y = ivy.negative(x)
     >>> print(y)
     {a:ivy.array([-0.,-1.,-2.]),b:ivy.array([-3.,-4.,5.])}
@@ -4227,8 +4251,8 @@ def negative(
 
     Using :class:`ivy.Container` instance method:
 
-    >>> x = ivy.Container(a=ivy.array([1,2,3]),\
-                         b=ivy.array([-4.4,5,-6.6]))
+    >>> x = ivy.Container(a=ivy.array([1,2,3]),
+    ...                   b=ivy.array([-4.4,5,-6.6]))
     >>> y = x.negative()
     >>> print(y)
     {a:ivy.array([-1,-2,-3]),b:ivy.array([4.4,-5.,6.6])}
@@ -4245,8 +4269,8 @@ def negative(
 
     Using :class:`ivy.Container` instance method:
 
-    >>> x = ivy.Container(a=ivy.array([1,2,3]),\
-                         b=ivy.array([-4.4,5,-6.6]))
+    >>> x = ivy.Container(a=ivy.array([1,2,3]),
+    ...                   b=ivy.array([-4.4,5,-6.6]))
     >>> y = -x
     >>> print(y)
     {a:ivy.array([-1,-2,-3]),b:ivy.array([4.4,-5.,6.6])}
@@ -4259,9 +4283,10 @@ def negative(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def not_equal(
-    x1: Union[float, ivy.Array, ivy.NativeArray],
-    x2: Union[float, ivy.Array, ivy.NativeArray],
+    x1: Union[float, ivy.Array, ivy.NativeArray, ivy.Container],
+    x2: Union[float, ivy.Array, ivy.NativeArray, ivy.Container],
     /,
     *,
     out: Optional[ivy.Array] = None,
@@ -4356,12 +4381,12 @@ def not_equal(
 
     With :class:`ivy.Container` input:
 
-    >>> x1 = ivy.Container(a=ivy.array([1, 0, 3]), \
-                           b=ivy.array([1, 2, 3]), \
-                           c=ivy.native_array([1, 2, 4]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 2, 3]), \
-                           c=ivy.native_array([1, 2, 4]))
+    >>> x1 = ivy.Container(a=ivy.array([1, 0, 3]),
+    ...                    b=ivy.array([1, 2, 3]),
+    ...                    c=ivy.native_array([1, 2, 4]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 2, 3]),
+    ...                    c=ivy.native_array([1, 2, 4]))
     >>> y = ivy.not_equal(x1, x2)
     >>> print(y)
     {
@@ -4370,12 +4395,12 @@ def not_equal(
         c: ivy.array([False, False, False])
     }
 
-    >>> x1 = ivy.Container(a=ivy.native_array([0, 1, 0]), \
-                           b=ivy.array([1, 2, 3]), \
-                           c=ivy.native_array([1.0, 2.0, 4.0]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.native_array([1.1, 2.1, 3.1]), \
-                           c=ivy.native_array([1, 2, 4]))
+    >>> x1 = ivy.Container(a=ivy.native_array([0, 1, 0]),
+    ...                    b=ivy.array([1, 2, 3]),
+    ...                    c=ivy.native_array([1.0, 2.0, 4.0]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.native_array([1.1, 2.1, 3.1]),
+    ...                    c=ivy.native_array([1, 2, 4]))
     >>> y = ivy.not_equal(x1, x2)
     >>> print(y)
     {
@@ -4386,10 +4411,10 @@ def not_equal(
 
     With a mix of :class:`ivy.Array` and :class:`ivy.Container` inputs:
 
-    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 3, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 4, 5]))
+    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 3, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 4, 5]))
     >>> y = ivy.not_equal(x1, x2)
     >>> print(y)
     {
@@ -4397,10 +4422,10 @@ def not_equal(
         b: ivy.array([False, True, False])
     }
 
-    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]), \
-                           b=ivy.array([1, 4, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3.0]), \
-                           b=ivy.array([1.0, 4.0, 5.0]))
+    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]),
+    ...                    b=ivy.array([1, 4, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3.0]),
+    ...                    b=ivy.array([1.0, 4.0, 5.0]))
     >>> y = ivy.not_equal(x1, x2)
     >>> print(y)
     {
@@ -4427,10 +4452,10 @@ def not_equal(
 
     Using :class:`ivy.Container` instance method:
 
-    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 3, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 4, 5]))
+    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 3, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 4, 5]))
     >>> y = x1.not_equal(x2, out=x2)
     >>> print(y)
     {
@@ -4438,10 +4463,10 @@ def not_equal(
         b: ivy.array([False, True, False])
     }
 
-    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]), \
-                           b=ivy.array([1, 4, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 3, 3.0]), \
-                           b=ivy.array([1.0, 4.0, 5.0]))
+    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]),
+    ...                    b=ivy.array([1, 4, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 3, 3.0]),
+    ...                    b=ivy.array([1.0, 4.0, 5.0]))
     >>> y = x1.not_equal(x2, out=x2)
     >>> print(y)
     {
@@ -4468,10 +4493,10 @@ def not_equal(
 
     With :class:`ivy.Container` instances:
 
-    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 3, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 4, 5]))
+    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 3, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 4, 5]))
     >>> y = (x1 != x2)
     >>> print(y)
     {
@@ -4479,10 +4504,10 @@ def not_equal(
         b: ivy.array([False, True, False])
     }
 
-    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]), \
-                           b=ivy.array([1, 4, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 3, 3.0]), \
-                           b=ivy.array([1.0, 4.0, 5.0]))
+    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]),
+    ...                    b=ivy.array([1, 4, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 3, 3.0]),
+    ...                    b=ivy.array([1.0, 4.0, 5.0]))
     >>> y = (x1 != x2)
     >>> print(y)
     {
@@ -4492,10 +4517,10 @@ def not_equal(
 
     With a mix of :class:`ivy.Array` and :class:`ivy.Container` instances:
 
-    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 3, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]), \
-                           b=ivy.array([1, 4, 5]))
+    >>> x1 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 3, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3]),
+    ...                    b=ivy.array([1, 4, 5]))
     >>> y = (x1 != x2)
     >>> print(y)
     {
@@ -4503,10 +4528,10 @@ def not_equal(
         b: ivy.array([False, True, False])
     }
 
-    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]), \
-                           b=ivy.array([1, 4, 5]))
-    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3.0]), \
-                           b=ivy.array([1.0, 4.0, 5.0]))
+    >>> x1 = ivy.Container(a=ivy.array([1.0, 2.0, 3.0]),
+    ...                    b=ivy.array([1, 4, 5]))
+    >>> x2 = ivy.Container(a=ivy.array([1, 2, 3.0]),
+    ...                    b=ivy.array([1.0, 4.0, 5.0]))
     >>> y = (x1 != x2)
     >>> print(y)
     {
@@ -4522,6 +4547,7 @@ def not_equal(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def positive(
     x: Union[float, ivy.Array, ivy.NativeArray],
     /,
@@ -4569,8 +4595,8 @@ def positive(
     >>> print(y)
     ivy.array([0., -1., -0.5,  2.,  3.])
 
-    >>> x = ivy.array([[1.1, 2.2, 3.3], \
-                       [-4.4, -5.5, -6.6]])
+    >>> x = ivy.array([[1.1, 2.2, 3.3],
+    ...                [-4.4, -5.5, -6.6]])
     >>> ivy.positive(x,out=x)
     >>> print(x)
     ivy.array([[ 1.1,  2.2,  3.3],
@@ -4585,8 +4611,8 @@ def positive(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 1., 2.]),\
-                         b=ivy.array([3., 4., -5.]))
+    >>> x = ivy.Container(a=ivy.array([0., 1., 2.]),
+    ...                   b=ivy.array([3., 4., -5.]))
     >>> y = ivy.positive(x)
     >>> print(y)
     {
@@ -4602,6 +4628,7 @@ def positive(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def pow(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -4700,10 +4727,14 @@ def pow(
     return ivy.current_backend(x1, x2).pow(x1, x2, out=out)
 
 
+pow.unsupported_gradients = {"torch": ["float16"]}
+
+
 @to_native_arrays_and_back
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def remainder(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -4771,7 +4802,7 @@ def remainder(
         divisor input array. Must be compatible with ``x1`` (see  ref:`Broadcasting`).
         Should have a numeric data type.
     modulus
-        whether to compute the modulus instead of the remainder. Default is True.
+        whether to compute the modulus instead of the remainder. Default is ``True``.
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -4837,6 +4868,7 @@ def remainder(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def round(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -4910,8 +4942,8 @@ def round(
     >>> print(y)
     ivy.array([2.,2.,15.,-5.])
 
-    >>> x = ivy.array([[0, 5.433, -343.3, 1.5], \
-                      [-5.5, 44.2, 11.5, 12.01]])
+    >>> x = ivy.array([[0, 5.433, -343.3, 1.5],
+    ...                [-5.5, 44.2, 11.5, 12.01]])
     >>> ivy.round(x, out=x)
     >>> print(x)
     ivy.array([[0.,5.,-343.,2.],[-6.,44.,12.,12.]])
@@ -4925,8 +4957,8 @@ def round(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([4.20, 8.6, 6.90, 0.0]),\
-                  b=ivy.array([-300.9, -527.3, 4.5]))
+    >>> x = ivy.Container(a=ivy.array([4.20, 8.6, 6.90, 0.0]),
+    ...                   b=ivy.array([-300.9, -527.3, 4.5]))
     >>> y = ivy.round(x)
     >>> print(y)
     {
@@ -4941,6 +4973,7 @@ def round(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def sign(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -4989,8 +5022,8 @@ def sign(
     >>> print(y)
     ivy.array([1., 0., 1., 1.])
 
-    >>> x = ivy.array([[5.78, -4., -6.9, 0],\
-                       [-.4, 0.5, 8, -0.01]])
+    >>> x = ivy.array([[5.78, -4., -6.9, 0],
+    ...                [-.4, 0.5, 8, -0.01]])
     >>> y = ivy.sign(x)
     >>> print(y)
     ivy.array([[ 1., -1., -1.,  0.],
@@ -5005,9 +5038,9 @@ def sign(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., -0.]),\
-                          b=ivy.array([1.46, 5.9, -0.0]),\
-                          c=ivy.array([-8.23, -4.9, -2.6, 7.4]))
+    >>> x = ivy.Container(a=ivy.array([0., -0.]),
+    ...                   b=ivy.array([1.46, 5.9, -0.0]),
+    ...                   c=ivy.array([-8.23, -4.9, -2.6, 7.4]))
     >>> y = ivy.sign(x)
     >>> print(y)
     {
@@ -5024,6 +5057,7 @@ def sign(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def sin(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5098,8 +5132,8 @@ def sin(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 1., 2., 3.]),\
-                          b=ivy.array([-4., -5., -6., -7.]))
+    >>> x = ivy.Container(a=ivy.array([0., 1., 2., 3.]),
+    ...                   b=ivy.array([-4., -5., -6., -7.]))
     >>> y = ivy.sin(x)
     >>> print(y)
     {
@@ -5115,6 +5149,7 @@ def sin(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def sinh(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5199,6 +5234,7 @@ def sinh(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def sqrt(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5309,6 +5345,7 @@ def sqrt(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def square(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5420,6 +5457,7 @@ def square(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def subtract(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -5481,6 +5519,7 @@ def subtract(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def tan(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5541,8 +5580,8 @@ def tan(
     >>> print(y)
     ivy.array([0.546, -0.842, -0.916])
 
-    >>> x = ivy.array([[1.1, 2.2, 3.3],\
-                        [-4.4, -5.5, -6.6]])
+    >>> x = ivy.array([[1.1, 2.2, 3.3],
+    ...                [-4.4, -5.5, -6.6]])
     >>> ivy.tan(x, out=x)
     >>> print(x)
     ivy.array([[1.96, -1.37, 0.16],
@@ -5566,6 +5605,7 @@ def tan(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def tanh(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5626,8 +5666,8 @@ def tanh(
     >>> print(y)
     ivy.array([0.462, -0.604, 0.984])
 
-    >>> x = ivy.array([[1.1, 2.2, 3.3],\
-                      [-4.4, -5.5, -6.6]])
+    >>> x = ivy.array([[1.1, 2.2, 3.3],
+    ...                [-4.4, -5.5, -6.6]])
     >>> ivy.tanh(x, out=x)
     >>> print(x)
     ivy.array([[0.8, 0.976, 0.997],
@@ -5642,8 +5682,8 @@ def tanh(
 
     With :class:`ivy.Container` input:
 
-    >>> x = ivy.Container(a=ivy.array([0., 1., 2.]),\
-                          b=ivy.array([3., 4., 5.]))
+    >>> x = ivy.Container(a=ivy.array([0., 1., 2.]),
+    ...                   b=ivy.array([3., 4., 5.]))
     >>> y = ivy.tanh(x)
     >>> print(y)
     {
@@ -5658,6 +5698,7 @@ def tanh(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def trunc(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5690,7 +5731,7 @@ def trunc(
     Returns
     -------
     ret
-        an array containing the values before the decimal point for each element ``x``.
+        an array containing the rounded result for each element in ``x``.
         The returned array must have the same data type as ``x``.
 
 
@@ -5703,6 +5744,43 @@ def trunc(
     but this function is *nestable*, and therefore also accepts :class:`ivy.Container`
     instances in place of any of the arguments
 
+    Examples
+    --------
+    With :class:`ivy.Array` input:
+
+    >>> x = ivy.array([-1, 0.54, 3.67, -0.025])
+    >>> y = ivy.trunc(x)
+    >>> print(y)
+    ivy.array([-1.,  0.,  3., -0.])
+
+    >>> x = ivy.array([0.56, 7, -23.4, -0.0375])
+    >>> ivy.trunc(x, out=x)
+    >>> print(x)
+    ivy.array([  0.,   7., -23.,  -0.])
+
+    >>> x = ivy.array([[0.4, -8, 0.55], [0, 0.032, 2]])
+    >>> y = ivy.zeros([2,3])
+    >>> ivy.trunc(x, out=y)
+    >>> print(y)
+    ivy.array([[ 0., -8.,  0.],
+           [ 0.,  0.,  2.]])
+
+    With :class:`ivy.NativeArray` input:
+
+    >>> x = ivy.native_array([0.34, -6., 0.09, 25.4])
+    >>> y = ivy.trunc(x)
+    >>> print(y)
+    ivy.array([ 0., -6.,  0., 25.])
+
+    With :class:`ivy.Container` input:
+
+    >>> x = ivy.Container(a=ivy.array([-0.25, 4, 1.3]), b=ivy.array([12, -3.5, 1.234]))
+    >>> y = ivy.trunc(x)
+    >>> print(y)
+    {
+        a: ivy.array([-0., 4., 1.]),
+        b: ivy.array([12., -3., 1.])
+    }
     """
     return ivy.current_backend(x).trunc(x, out=out)
 
@@ -5715,6 +5793,7 @@ def trunc(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def erf(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5744,11 +5823,13 @@ def erf(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def maximum(
     x1: Union[ivy.Array, ivy.NativeArray, Number],
     x2: Union[ivy.Array, ivy.NativeArray, Number],
     /,
     *,
+    use_where: bool = True,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """Returns the max of x1 and x2 (i.e. x1 > x2 ? x1 : x2) element-wise.
@@ -5759,6 +5840,9 @@ def maximum(
         Input array containing elements to maximum threshold.
     x2
         Tensor containing maximum values, must be broadcastable to x1.
+    use_where
+        Whether to use :func:`where` to calculate the maximum. If ``False``, the maximum
+        is calculated using the ``(x + y + |x - y|)/2`` formula. Default is ``True``.
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -5768,7 +5852,6 @@ def maximum(
     ret
         An array with the elements of x1, but clipped to not be lower than the x2
         values.
-
 
     Examples
     --------
@@ -5797,8 +5880,8 @@ def maximum(
     With one :class:`ivy.Container` input:
 
     >>> x = ivy.array([[1, 3], [2, 4], [3, 7]])
-    >>> y = ivy.Container(a=ivy.array([1, 0,]), \
-                          b=ivy.array([-5, 9]))
+    >>> y = ivy.Container(a=ivy.array([1, 0,]),
+    ...                   b=ivy.array([-5, 9]))
     >>> z = ivy.maximum(x, y)
     >>> print(z)
     {
@@ -5821,18 +5904,20 @@ def maximum(
         b: ivy.array([5, 9, 7])
     }
     """
-    return ivy.current_backend(x1).maximum(x1, x2, out=out)
+    return ivy.current_backend(x1).maximum(x1, x2, use_where=use_where, out=out)
 
 
 @to_native_arrays_and_back
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def minimum(
     x1: Union[ivy.Array, ivy.NativeArray],
     x2: Union[ivy.Array, ivy.NativeArray],
     /,
     *,
+    use_where: bool = True,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """Returns the min of x1 and x2 (i.e. x1 < x2 ? x1 : x2) element-wise.
@@ -5843,6 +5928,9 @@ def minimum(
         Input array containing elements to minimum threshold.
     x2
         Tensor containing minimum values, must be broadcastable to x1.
+    use_where
+        Whether to use :func:`where` to calculate the minimum. If ``False``, the minimum
+        is calculated using the ``(x + y - |x - y|)/2`` formula. Default is ``True``.
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -5895,10 +5983,10 @@ def minimum(
 
     With multiple :class:`ivy.Container` inputs:
 
-    >>> x = ivy.Container(a=ivy.array([1, 3, 1]),\
-                        b=ivy.array([2, 8, 5]))
-    >>> y = ivy.Container(a=ivy.array([1, 5, 6]),\
-                        b=ivy.array([5, 9, 7]))
+    >>> x = ivy.Container(a=ivy.array([1, 3, 1]),
+    ...                   b=ivy.array([2, 8, 5]))
+    >>> y = ivy.Container(a=ivy.array([1, 5, 6]),
+    ...                   b=ivy.array([5, 9, 7]))
     >>> z = ivy.minimum(x, y)
     >>> print(z)
     {
@@ -5906,13 +5994,14 @@ def minimum(
         b: ivy.array([2, 8, 5])
     }
     """
-    return ivy.current_backend(x1).minimum(x1, x2, out=out)
+    return ivy.current_backend(x1).minimum(x1, x2, use_where=use_where, out=out)
 
 
 @to_native_arrays_and_back
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def reciprocal(
     x: Union[float, ivy.Array, ivy.NativeArray],
     /,
@@ -5941,6 +6030,7 @@ def reciprocal(
 @to_native_arrays_and_back
 @handle_out_argument
 @handle_nestable
+@handle_array_like
 def deg2rad(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -5998,7 +6088,7 @@ def deg2rad(
 
     With :class:`ivy.Container` input:
 
-    >>> x=ivy.Container(a=ivy.array([-0,20.1,-50.5,-ivy.nan]),\
+    >>> x=ivy.Container(a=ivy.array([-0,20.1,-50.5,-ivy.nan]),
                         b=ivy.array([0,90,180,270,360]))
     >>> y=ivy.deg2rad(x)
     >>> print(y)
@@ -6006,9 +6096,9 @@ def deg2rad(
         a: ivy.array([0., 0.351, -0.881, nan]),
         b: ivy.array([0., 1.57, 3.14, 4.71, 6.28])
     }
-    
-    >>> x=ivy.Container(a=ivy.array([0,90,180,270,360]),\
-         b=ivy.native_array([0,-1.5,-50,ivy.nan]))
+
+    >>> x=ivy.Container(a=ivy.array([0,90,180,270,360]),
+    ...                 b=ivy.native_array([0,-1.5,-50,ivy.nan]))
     >>> y=ivy.deg2rad(x)
     >>> print(y)
     {
@@ -6023,6 +6113,7 @@ def deg2rad(
 @to_native_arrays_and_back
 @handle_out_argument
 @handle_nestable
+@handle_array_like
 def rad2deg(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
@@ -6042,7 +6133,7 @@ def rad2deg(
     Returns
     -------
     ret
-        an array with each element in ``x`` converted from radians to degrees. 
+        an array with each element in ``x`` converted from radians to degrees.
 
     Examples
     --------
@@ -6079,9 +6170,9 @@ def rad2deg(
     ivy.array([   0., 1150.,   nan])
 
     With :class:`ivy.Container` input:
-    
-    >>> x=ivy.Container(a=ivy.array([-0,20.1,-50.5,-ivy.nan]),\
-                        b=ivy.array([0,1,2,3,4]))
+
+    >>> x=ivy.Container(a=ivy.array([-0,20.1,-50.5,-ivy.nan]),
+    ...                 b=ivy.array([0,1,2,3,4]))
     >>> y=ivy.rad2deg(x)
     >>> print(y)
     {
@@ -6089,8 +6180,8 @@ def rad2deg(
         b: ivy.array([0., 57.3, 115., 172., 229.])
     }
 
-    >>> x=ivy.Container(a=ivy.array([0,10,180,8.5,6]),\
-         b=ivy.native_array([0,-1.5,0.5,ivy.nan]))
+    >>> x=ivy.Container(a=ivy.array([0,10,180,8.5,6]),
+    ...                 b=ivy.native_array([0,-1.5,0.5,ivy.nan]))
     >>> y=ivy.rad2deg(x)
     >>> print(y)
     {
@@ -6105,6 +6196,7 @@ def rad2deg(
 @handle_out_argument
 @handle_nestable
 @handle_exceptions
+@handle_array_like
 def trunc_divide(
     x1: Union[float, ivy.Array, ivy.NativeArray],
     x2: Union[float, ivy.Array, ivy.NativeArray],
@@ -6141,6 +6233,74 @@ def trunc_divide(
     >>> y = ivy.trunc_divide(x1, x2)
     >>> print(y)
     ivy.array([ 0., -1., 14.])
-
     """
     return ivy.trunc(ivy.divide(x1, x2, out=out))
+
+
+@to_native_arrays_and_back
+@handle_out_argument
+@handle_nestable
+@handle_exceptions
+@handle_array_like
+def isreal(
+    x: Union[ivy.Array, ivy.NativeArray],
+    /,
+    *,
+    out: Optional[ivy.Array] = None,
+) -> ivy.Array:
+    """Tests each element ``x_i`` of the input array ``x`` to determine whether the
+    element is real number.
+    Returns a bool array, where True if input element is real.
+    If element has complex type with zero complex part, the return value
+    for that element is True.
+
+    Parameters
+    ----------
+    x
+        input array.
+    out
+        optional output array, for writing the result to. It must have a shape that the
+        inputs broadcast to.
+
+    Returns
+    -------
+    ret
+        an array containing test results. An element ``out_i`` is ``True`` if ``x_i`` is
+        real number and ``False`` otherwise. The returned array should have a data type
+        of ``bool``.
+
+    The descriptions above assume an array input for simplicity, but
+    the method also accepts :class:`ivy.Container` instances in place of
+    :class:`ivy.Array` or :class:`ivy.NativeArray` instances, as shown in the type hints
+    and also the examples below.
+
+    Examples
+    --------
+    With :class:`ivy.Array` inputs:
+    >>> x = ivy.array([[[1.1], [float('inf')], [-6.3]]])
+    >>> z = ivy.isreal(x)
+    >>> print(z)
+    ivy.array([[[True], [True], [True]]])
+
+    >>> x = ivy.array([1-0j, 3j, 7+5j])
+    >>> z = ivy.isreal(x)
+    >>> print(z)
+    ivy.array([ True, False, False])
+
+    With :class:`ivy.NativeArray` inputs:
+    >>> x = ivy.native_array([[1], [5+6.9j], [-5.5]])
+    >>> z = ivy.isreal(x)
+    >>> print(z)
+    ivy.array([[True], [False], [True]])
+
+    With :class:`ivy.Container` input:
+    >>> x = ivy.Container(a=ivy.array([-6.7-7j, -np.inf, 1.23]),\
+                          b=ivy.array([5j, 5-6j, 3]))
+    >>> z = ivy.isreal(x)
+    >>> print(z)
+    {
+        a: ivy.array([False, True, True]),
+        b: ivy.array([False, False, True])
+    }
+    """
+    return ivy.current_backend(x).isreal(x, out=out)

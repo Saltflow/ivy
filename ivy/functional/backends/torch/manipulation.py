@@ -1,12 +1,23 @@
 # global
-import ivy
-import torch
 import math
 from numbers import Number
 from typing import Union, Optional, Tuple, List, Sequence, Iterable
 
+import torch
+
+# local
+import ivy
+from ivy.func_wrapper import with_unsupported_dtypes
+
 # noinspection PyProtectedMember
 from ivy.functional.ivy.manipulation import _calculate_out_shape
+from . import backend_version
+
+
+def _reshape_fortran_torch(x, shape):
+    if len(x.shape) > 0:
+        x = x.permute(*reversed(range(len(x.shape))))
+    return x.reshape(shape[::-1]).permute(list(range(len(shape)))[::-1])
 
 
 # Array API Standard #
@@ -14,7 +25,11 @@ from ivy.functional.ivy.manipulation import _calculate_out_shape
 
 
 def concat(
-    xs: List[torch.Tensor], /, *, axis: int = 0, out: Optional[torch.Tensor] = None
+    xs: Union[Tuple[torch.Tensor, ...], List[torch.Tensor]],
+    /,
+    *,
+    axis: Optional[int] = 0,
+    out: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
     if axis is None:
         is_tuple = type(xs) is tuple
@@ -50,13 +65,13 @@ def flip(
     axis: Optional[Union[int, Sequence[int]]] = None,
     out: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
-    num_dims: int = len(x.shape)
+    num_dims = len(x.shape)
     if not num_dims:
         return x
     if axis is None:
-        new_axis: List[int] = list(range(num_dims))
+        new_axis = list(range(num_dims))
     else:
-        new_axis: List[int] = axis
+        new_axis = axis
     if isinstance(new_axis, int):
         new_axis = [new_axis]
     else:
@@ -81,11 +96,17 @@ def reshape(
     shape: Union[ivy.NativeShape, Sequence[int]],
     *,
     copy: Optional[bool] = None,
+    order: Optional[str] = "C",
     out: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
+    ivy.assertions.check_elem_in_list(order, ["C", "F"])
     if copy:
         newarr = torch.clone(x)
+        if order == "F":
+            return _reshape_fortran_torch(newarr, shape)
         return torch.reshape(newarr, shape)
+    if order == "F":
+        return _reshape_fortran_torch(x, shape)
     return torch.reshape(x, shape)
 
 
@@ -115,7 +136,7 @@ def squeeze(
 ) -> torch.Tensor:
     if isinstance(axis, int):
         if x.size(dim=axis) > 1:
-            raise ivy.exceptions.IvyException(
+            raise ValueError(
                 "Expected dimension of size [{}, {}], but found "
                 "dimension size {}".format(-x.dim(), x.dim(), axis)
             )
@@ -137,7 +158,7 @@ def squeeze(
     for i in axis_updated_after_squeeze:
         shape = x.shape[i]
         if shape > 1 and (shape < -dim or dim <= shape):
-            raise ivy.exceptions.IvyException(
+            raise ValueError(
                 "Expected dimension of size [{}, {}], "
                 "but found dimension size {}".format(-dim, dim, shape)
             )
@@ -205,6 +226,7 @@ def split(
     return list(torch.split(x, num_or_size_splits, axis))
 
 
+@with_unsupported_dtypes({"1.11.0": ("int8", "int16", "uint8")}, backend_version)
 def repeat(
     x: torch.Tensor,
     /,
@@ -217,9 +239,6 @@ def repeat(
         axis = None
     repeats = torch.tensor(repeats)
     return torch.repeat_interleave(x, repeats, axis)
-
-
-repeat.unsupported_dtypes = ("int8", "int16", "uint8")
 
 
 def tile(
@@ -242,9 +261,8 @@ def constant_pad(
         x = x.unsqueeze(0)
     if isinstance(pad_width, torch.Tensor):
         pad_width = pad_width.detach().cpu().numpy().tolist()
-    pad_width.reverse()
     pad_width_flat: List[int] = list()
-    for pad_width_sec in pad_width:
+    for pad_width_sec in reversed(pad_width):
         for item in pad_width_sec:
             pad_width_flat.append(item)
     return torch.nn.functional.pad(x, pad_width_flat, mode="constant", value=value)
@@ -266,6 +284,7 @@ def swapaxes(
     return torch.transpose(x, axis0, axis1)
 
 
+@with_unsupported_dtypes({"1.11.0": ("float16",)}, backend_version)
 def clip(
     x: torch.Tensor,
     x_min: Union[Number, torch.Tensor],
@@ -285,7 +304,6 @@ def clip(
 
 
 clip.support_native_out = True
-clip.unsupported_dtypes = ("float16",)
 
 
 def unstack(

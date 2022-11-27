@@ -4,7 +4,9 @@ from typing import Union, Optional, Sequence
 
 # local
 import ivy
+from ivy.func_wrapper import with_unsupported_dtypes
 from ivy.functional.backends.jax import JaxArray
+from . import backend_version
 
 
 # Array API Standard #
@@ -116,47 +118,62 @@ def var(
         axis = tuple(range(len(x.shape)))
     axis = (axis,) if isinstance(axis, int) else tuple(axis)
     if isinstance(correction, int):
-        return jnp.asarray(
-            jnp.var(x, axis=axis, ddof=correction, keepdims=keepdims, out=out)
-        ).astype(x.dtype)
+        ret = jnp.var(x, axis=axis, ddof=correction, keepdims=keepdims, out=out)
+        return ivy.astype(ret, x.dtype, copy=False)
     if x.size == 0:
         return jnp.asarray(float("nan"))
     size = 1
-    if size == correction:
-        size += 0.0001  # to avoid division by zero in return
     for a in axis:
         size *= x.shape[a]
-    return jnp.asarray(
+    if size == correction:
+        size += 0.0001  # to avoid division by zero in return
+    return ivy.astype(
         jnp.multiply(
             jnp.var(x, axis=axis, keepdims=keepdims, out=out),
-            size / (size - correction),
-        )
-    ).astype(x.dtype)
+            size / jnp.abs(size - correction),
+        ),
+        x.dtype,
+        copy=False,
+    )
 
 
 # Extra #
 # ------#
 
 
+@with_unsupported_dtypes({"0.3.14 and below": ("float16", "bfloat16")}, backend_version)
 def cumprod(
     x: JaxArray,
     axis: int = 0,
     exclusive: bool = False,
+    reverse: bool = False,
     *,
     dtype: Optional[jnp.dtype] = None,
     out: Optional[JaxArray] = None,
 ) -> JaxArray:
     dtype = ivy.as_native_dtype(dtype)
     if dtype is None:
-        dtype = _infer_dtype(x.dtype)
-    if dtype != x.dtype:
-        x = x.astype(dtype)
-    if exclusive:
+        if dtype is jnp.bool_:
+            dtype = ivy.default_int_dtype(as_native=True)
+        else:
+            dtype = _infer_dtype(x.dtype)
+    if not (exclusive or reverse):
+        return jnp.cumprod(x, axis, dtype=dtype)
+    elif exclusive and reverse:
+        x = jnp.cumprod(jnp.flip(x, axis=(axis,)), axis=axis, dtype=dtype)
         x = jnp.swapaxes(x, axis, -1)
         x = jnp.concatenate((jnp.ones_like(x[..., -1:]), x[..., :-1]), -1)
-        res = jnp.cumprod(x, -1)
-        return jnp.swapaxes(res, axis, -1)
-    return jnp.cumprod(x, axis)
+        x = jnp.swapaxes(x, axis, -1)
+        return jnp.flip(x, axis=(axis,))
+
+    elif exclusive:
+        x = jnp.swapaxes(x, axis, -1)
+        x = jnp.concatenate((jnp.ones_like(x[..., -1:]), x[..., :-1]), -1)
+        x = jnp.cumprod(x, -1, dtype=dtype)
+        return jnp.swapaxes(x, axis, -1)
+    else:
+        x = jnp.cumprod(jnp.flip(x, axis=(axis,)), axis=axis, dtype=dtype)
+        return jnp.flip(x, axis=axis)
 
 
 def cumsum(
